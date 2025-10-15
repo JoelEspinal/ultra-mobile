@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:ultra_mobile/src/data/network/todos_api/models/todo_response.dart';
-import 'package:ultra_mobile/src/data/network/todos_api/services/todo_service.dart';
+
+import '../../data/network/todos_api/services/todo_service.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
