@@ -8,6 +8,12 @@ class TodoService {
 
   TodoService({required this.apiClient});
 
+  Future<Todo> fetchTodo(int id) async {
+    final request = "${Constant.todosEndpoint}/$id";
+    final response = await apiClient.dio.get(request);
+    return Todo.fromJson(response.data);
+  }
+
   Future<TodosResponse> fetchTodos() async {
     final response = await apiClient.dio.get(Constant.todosEndpoint);
     return TodosResponse.fromJson(response.data);
