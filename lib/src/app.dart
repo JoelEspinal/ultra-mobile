@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:ultra_mobile/src/data/network/todos_api/api_client.dart';
-import 'package:ultra_mobile/src/data/network/todos_api/services/todo_service.dart';
-import 'package:ultra_mobile/src/presentation/home_screen/home_screen.dart';
+import 'data/network/todos_api/api_client.dart';
+import 'data/network/todos_api/services/todo_service.dart';
+import 'presentation/home_screen/home_screen.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
