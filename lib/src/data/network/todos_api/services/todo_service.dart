@@ -1,6 +1,7 @@
-import 'package:ultra_mobile/src/data/network/todos_api/api_client.dart';
-import 'package:ultra_mobile/src/data/network/todos_api/constant.dart';
-import 'package:ultra_mobile/src/data/network/todos_api/models/todo_response.dart';
+import '../api_client.dart';
+import '../constant.dart';
+import '../models/todo.dart';
+import '../models/todo_response.dart';
 
 class TodoService {
   final ApiClient apiClient;
@@ -16,5 +17,20 @@ class TodoService {
     final request = "${Constant.baseUrl}?${Constant.limit}=$limit&skip=$skip";
     final response = await apiClient.dio.get(request);
     return TodosResponse.fromJson(response.data);
+  }
+
+  Future<String> createTodo(Todo todo) async {
+    await Future.delayed(const Duration(seconds: 2));
+    return "Todo Created";
+  }
+
+  Future<String> editTodo(Todo todo) async {
+    await Future.delayed(const Duration(seconds: 2));
+    return "Todo Edited";
+  }
+
+  Future<String> deleteTodo(int id) async {
+    await Future.delayed(const Duration(seconds: 2));
+    return "Todo Removed";
   }
 }
