@@ -1,13 +1,17 @@
 import 'package:dartz/dartz.dart';
-import 'package:ultra_mobile/src/data/network/todos_api/models/todo.dart';
-
+import '../entities/todo.dart';
 import '../failures/failure.dart';
+import '../repositories/todo_repository.dart';
 
 class FetchTodosUseCase {
   // required api repository remote api
 
+  final TodoRepository todoRepository;
+
+  FetchTodosUseCase({required this.todoRepository});
+
   Future<Either<Failure, List<Todo>>> execute() async {
-    // Implementation goes here
-    return Right([]);
+    final todos = await todoRepository.getTodos();
+    return todos;
   }
 }

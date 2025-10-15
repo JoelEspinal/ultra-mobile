@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
 
+import '../../domain/entities/todo.dart' as todo_entity;
+
 import '../network/error_handler.dart';
 import '../network/todos_api/models/todo.dart';
 import '../network/todos_api/services/todo_service.dart';
@@ -12,17 +14,42 @@ class TodoRepositoryImpl implements TodoRepository {
   TodoRepositoryImpl({required this.todoService});
 
   @override
-  Future<Either<Failure, List<Todo>>> getTodos() async {
+  Future<Either<Failure, List<todo_entity.Todo>>> getTodos() async {
     try {
       final todosResponse = await todoService.fetchTodos();
-      return Right(todosResponse.todos);
+      final todoEntities = todosResponse.todos
+          .map(
+            (t) => todo_entity.Todo(
+              id: t.id,
+              todo: t.todo,
+              completed: t.completed,
+              userId: t.userId,
+            ),
+          )
+          .toList();
+
+      return Right(todoEntities);
     } catch (e) {
       return Left(mapExceptionToFailure(e));
     }
   }
 
   @override
-  Future<Either<Failure, Todo>> getTodo(int id) {
-    throw UnimplementedError();
+  Future<Either<Failure, todo_entity.Todo>> getTodo(int id) async {
+    try {
+      final todo = await todoService.fetchTodo(id);
+      final todoEntity = todo.map(
+        (t) => todo_entity.Todo(
+          id: t.id,
+          todo: t.todo,
+          completed: t.completed,
+          userId: t.userId,
+        ),
+      );
+
+      return Right(todoEntity);
+    } catch (e) {
+      return Left(mapExceptionToFailure(e));
+    }
   }
 }

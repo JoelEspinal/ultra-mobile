@@ -17,10 +17,11 @@ class HomeScreen extends StatelessWidget {
             // TodosResponse todosResponse = await todoService.fetchTodos();
             // print(todosResponse.todos.toString());
 
-            // String response = await todoService.deleteTodo(1);
-            // print(response);
+            var todo = await todoService.fetchTodo(1);
+
+            // print(todo.todo);
           },
-          child: Text("FETCH TODOS"),
+          child: Text("FETCH single TODOS"),
         ),
       ),
     );
