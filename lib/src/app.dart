@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ultra_mobile/src/domain/use_cases/delete_todo_use_case.dart';
-import 'presentation/todos_screen/todos_cubit.dart';
+import 'package:provider/provider.dart';
+
+import 'domain/use_cases/delete_todo_use_case.dart';
+import 'domain/use_cases/update_todo_use_case.dart';
+import 'presentation/todo_screen/todo_detail_cubit.dart';
+import 'presentation/todo_screen/todo_detail_page.dart';
+
+import '../../src/domain/entities/todo.dart' as entity_todo;
 import 'data/network/todos_api/api_client.dart';
 import 'data/network/todos_api/services/todo_service.dart';
 import 'data/repositories/todo_repository_impl.dart';
 import 'domain/repositories/todo_repository.dart';
 import 'domain/use_cases/fetch_todos_use_case.dart';
+import 'presentation/todos_screen/todos_cubit.dart';
 import 'presentation/todos_screen/todos_page.dart';
 
 class App extends StatelessWidget {
@@ -34,15 +40,33 @@ class App extends StatelessWidget {
           create: (context) =>
               DeleteTodoUseCase(todoRepository: context.read<TodoRepository>()),
         ),
+        Provider<UpdateTodoUseCase>(
+          create: (context) =>
+              UpdateTodoUseCase(todoRepository: context.read<TodoRepository>()),
+        ),
       ],
       child: MaterialApp(
-        home: BlocProvider(
-          create: (context) => TodosCubit(
-            context.read<FetchTodosUseCase>(),
-            context.read<DeleteTodoUseCase>(),
+        routes: {
+          '/': (context) => BlocProvider(
+            create: (context) => TodosCubit(
+              context.read<FetchTodosUseCase>(),
+              context.read<DeleteTodoUseCase>(),
+            ),
+            child: const TodosPage(),
           ),
-          child: const TodosPage(),
-        ),
+        },
+        onGenerateRoute: (settings) {
+          if (settings.name == '/todoDetail') {
+            final todo = settings.arguments as entity_todo.Todo;
+            return MaterialPageRoute(
+              builder: (context) => BlocProvider(
+                create: (context) => TodoDetailCubit(),
+                child: TodoDetailPage(todo: todo),
+              ),
+            );
+          }
+          return null;
+        },
       ),
     );
   }

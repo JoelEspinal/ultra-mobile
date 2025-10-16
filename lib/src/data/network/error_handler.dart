@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'dart:io'; // For SocketException
+import 'dart:io';
 
 import '../../domain/failures/failure.dart';
 

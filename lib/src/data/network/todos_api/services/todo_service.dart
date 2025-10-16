@@ -30,9 +30,10 @@ class TodoService {
     return "Todo Created";
   }
 
-  Future<String> editTodo(Todo todo) async {
-    await Future.delayed(const Duration(seconds: 2));
-    return "Todo Edited";
+  Future<Todo?> updateTodo(Todo todo) async {
+    final headers = "${Constant.baseUrl}${Constant.todosEndpoint}/${todo.id}";
+    final response = await apiClient.dio.put(headers, data: todo.toJson());
+    return Todo.fromJson(response.data);
   }
 
   Future<Todo?> deleteTodo(int id) async {

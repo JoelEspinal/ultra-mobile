@@ -17,8 +17,9 @@ abstract class Todo with _$Todo {
     int? priority,
     String? category,
     String? imageUrl,
-    String? reminderTime,
+    DateTime? reminderTime,
     bool? isFavorite,
+    String? imagePath,
     String? createdAt,
     String? updatedAt,
   }) = _Todo;

@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
-import '../entities/todo.dart';
+
+import '../entities/todo.dart' as todo_entity;
 import '../failures/failure.dart';
 import '../repositories/todo_repository.dart';
 
@@ -10,7 +11,7 @@ class FetchTodosUseCase {
 
   FetchTodosUseCase({required this.todoRepository});
 
-  Future<Either<Failure, List<Todo>>> execute() async {
+  Future<Either<Failure, List<todo_entity.Todo>>> execute() async {
     final todos = await todoRepository.getTodos();
     return todos;
   }

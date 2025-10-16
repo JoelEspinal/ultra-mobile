@@ -1,4 +1,3 @@
-// The base class for all application failures.
 abstract class Failure {
   final String message;
   const Failure(this.message);

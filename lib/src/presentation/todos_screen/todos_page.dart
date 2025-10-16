@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'todos_cubit.dart';
 import 'todos_state.dart';
 
@@ -43,6 +44,13 @@ class TodosPage extends StatelessWidget {
                                 );
                               },
                               child: ListTile(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/todoDetail',
+                                    arguments: todo,
+                                  );
+                                },
                                 title: Text(
                                   todo.todo,
                                   style: todo.completed
@@ -55,7 +63,6 @@ class TodosPage extends StatelessWidget {
                                         )
                                       : null,
                                 ),
-
                                 leading: IconButton(
                                   onPressed: () =>
                                       todosCubit.toggleTodoStatus(todo.id),
@@ -77,8 +84,6 @@ class TodosPage extends StatelessWidget {
                 ),
               ),
             ),
-
-            // 2. The Floating Search Bar
             Positioned(
               top: 20,
               left: 15,

@@ -6,7 +6,6 @@ import '../../domain/failures/failure.dart';
 
 import 'todos_state.dart';
 
-// The Cubit acts as the ViewModel
 class TodosCubit extends Cubit<TodosState> {
   final FetchTodosUseCase _fetchTodosUseCase;
   final DeleteTodoUseCase _deleteTodoUseCase;
@@ -124,6 +123,8 @@ class TodosCubit extends Cubit<TodosState> {
 
     // Emit a new success state immediately for optimistic UI update
     emit(state.copyWith(todos: updatedTodos));
+
+    // Pending implementation of the update use case
 
     // You would typically call a Use Case here to update the remote API
     // _updateTodoStatusUseCase.call(todoId, updatedTodos.firstWhere(...).isCompleted);

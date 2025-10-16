@@ -1,11 +1,10 @@
 import 'package:dartz/dartz.dart';
+
 import '../entities/todo.dart';
 import '../failures/failure.dart';
 import '../repositories/todo_repository.dart';
 
 class DeleteTodoUseCase {
-  // required api repository remote api
-
   final TodoRepository todoRepository;
 
   DeleteTodoUseCase({required this.todoRepository});
