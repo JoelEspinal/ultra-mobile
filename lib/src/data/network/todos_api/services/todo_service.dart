@@ -38,6 +38,6 @@ class TodoService {
   Future<Todo?> deleteTodo(int id) async {
     final request = "${Constant.baseUrl}${Constant.todosEndpoint}/$id";
     final response = await apiClient.dio.delete(request);
-    return response.data;
+    return Todo.fromJson(response.data);
   }
 }
