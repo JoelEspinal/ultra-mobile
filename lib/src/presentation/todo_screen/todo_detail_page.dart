@@ -87,8 +87,9 @@ class TodoDetailPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.save),
             onPressed: () {
-              // Pending implementation of save functionality
+              // TODO Pending implementation of save functionality
               // context.read<TodoDetailCubit>().saveTodo();
+
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Saving changes...')),
               );
@@ -149,12 +150,12 @@ class TodoDetailPage extends StatelessWidget {
                 Card(
                   child: CheckboxListTile(
                     title: const Text('Mark as Completed'),
-                    value: todo.completed,
+                    value: state.todoDetail!.completed,
                     onChanged: (_) {
                       context.read<TodoDetailCubit>().toggleCompleted();
                     },
                     secondary: Icon(
-                      todo.completed
+                      state.todoDetail!.completed
                           ? Icons.check_circle
                           : Icons.radio_button_unchecked,
                       color: todo.completed ? Colors.green : null,
@@ -168,7 +169,7 @@ class TodoDetailPage extends StatelessWidget {
                 // Replaced TextEditingController with initialValue and onChanged
                 TextFormField(
                   key: ValueKey('${todo.id}_desc'),
-                  initialValue: todo.description,
+                  initialValue: state.todoDetail!.description,
                   onChanged: (value) {
                     context.read<TodoDetailCubit>().updateDescription(value);
                   },
@@ -186,8 +187,10 @@ class TodoDetailPage extends StatelessWidget {
                   child: ListTile(
                     leading: const Icon(Icons.calendar_today),
                     title: Text(
-                      todo.dueDate != null
-                          ? DateFormat('MMM dd, yyyy').format(todo.dueDate!)
+                      state.todoDetail?.dueDate != null
+                          ? DateFormat(
+                              'MMM dd, yyyy',
+                            ).format(state.todoDetail!.dueDate!)
                           : 'No due date set',
                     ),
                     trailing: todo.dueDate != null
@@ -225,8 +228,9 @@ class TodoDetailPage extends StatelessWidget {
                       return RadioListTile<Priority>(
                         title: Text(_getPriorityLabel(priority)),
                         value: priority,
+                        //value: state.todoDetail!.priority,
                         groupValue: Priority.values.firstWhere(
-                          (p) => p == todo.priority,
+                          (p) => p == state.todoDetail?.priority,
                           orElse: () => Priority.medium,
                         ),
                         onChanged: (Priority? value) {
@@ -250,8 +254,8 @@ class TodoDetailPage extends StatelessWidget {
                 _buildSectionTitle('Category'),
                 // Replaced TextEditingController with initialValue and onChanged
                 TextFormField(
-                  key: ValueKey('${todo.id}_category'),
-                  initialValue: todo.category,
+                  key: ValueKey('${state.todoDetail?.id}_category'),
+                  initialValue: state.todoDetail?.category,
                   onChanged: (value) {
                     context.read<TodoDetailCubit>().updateCategory(value);
                   },
@@ -329,13 +333,13 @@ class TodoDetailPage extends StatelessWidget {
                   child: ListTile(
                     leading: const Icon(Icons.notifications),
                     title: Text(
-                      todo.reminderTime != null
+                      state.todoDetail?.reminderTime != null
                           ? DateFormat(
                               'MMM dd, yyyy - hh:mm a',
-                            ).format(todo.reminderTime!)
+                            ).format(state.todoDetail!.reminderTime!)
                           : 'No reminder set',
                     ),
-                    trailing: todo.reminderTime != null
+                    trailing: state.todoDetail?.reminderTime != null
                         ? IconButton(
                             icon: const Icon(Icons.clear),
                             onPressed: () {
@@ -346,7 +350,8 @@ class TodoDetailPage extends StatelessWidget {
                     onTap: () async {
                       final date = await showDatePicker(
                         context: context,
-                        initialDate: todo.reminderTime ?? DateTime.now(),
+                        initialDate:
+                            state.todoDetail?.reminderTime ?? DateTime.now(),
                         firstDate: DateTime.now(),
                         lastDate: DateTime.now().add(const Duration(days: 365)),
                       );
@@ -355,7 +360,7 @@ class TodoDetailPage extends StatelessWidget {
                         final time = await showTimePicker(
                           context: context,
                           initialTime: TimeOfDay.fromDateTime(
-                            todo.reminderTime ?? DateTime.now(),
+                            state.todoDetail?.reminderTime ?? DateTime.now(),
                           ),
                         );
 
