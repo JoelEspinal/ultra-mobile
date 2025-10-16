@@ -28,7 +28,17 @@ class TodosPage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final todo = state.todos[index];
                       return ListTile(
-                        title: Text(todo.todo),
+                        title: Text(
+                          todo.todo,
+                          style: todo.completed
+                              ? TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.lineThrough,
+                                  decorationColor: Colors.black,
+                                  decorationThickness: 2.0,
+                                )
+                              : null,
+                        ),
 
                         leading: IconButton(
                           onPressed: () => todosCubit.toggleTodoStatus(todo.id),
