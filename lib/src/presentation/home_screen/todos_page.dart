@@ -12,144 +12,94 @@ class TodosPage extends StatelessWidget {
     todosCubit.loadTodos();
     return SafeArea(
       child: Scaffold(
-        body: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              floating: true,
-              snap:
-                  false, // Make the AppBar snap completely into view or hide completely
-              // A standard AppBar height, but it will hide/show on scroll
-              toolbarHeight: 60.0,
-              // The actual search bar UI is placed in the title/flexibleSpace
-              title: Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black45,
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: const Center(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Todo...',
-                        prefixIcon: Icon(Icons.search),
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(vertical: 15),
-                      ),
+        body: Stack(
+          children: <Widget>[
+            // 1. The main scrollable content
+            ListView.builder(
+              padding: const EdgeInsets.only(
+                top: 100,
+              ), // Push content down past the floating bar
+              itemCount: 50,
+              itemBuilder: (context, index) {
+                return ListTile(title: Text('Content Item $index'));
+              },
+            ),
+
+            // 2. The Floating Search Bar
+            Positioned(
+              top: 20, // Distance from the top of the screen
+              left: 15,
+              right: 15,
+              child: Container(
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
                     ),
+                  ],
+                ),
+                child: const TextField(
+                  decoration: InputDecoration(
+                    hintText: "Floating Search Bar...",
+                    border: InputBorder.none,
+                    prefixIcon: Icon(Icons.search),
                   ),
                 ),
               ),
             ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-                return RefreshIndicator(
-                  child: Center(
-                    child: BlocBuilder<TodosCubit, TodosState>(
-                      builder: (context, state) {
-                        if (state.status == TodoStatus.loading) {
-                          return const CircularProgressIndicator();
-                        } else if (state.status == TodoStatus.failure) {
-                          return Text(state.errorMessage);
-                        } else if (state.status == TodoStatus.success) {
-                          return ListView.builder(
-                            itemCount: state.todos.length,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              final todo = state.todos[index];
-                              return ListTile(
-                                title: Text(
-                                  todo.todo,
-                                  style: todo.completed
-                                      ? TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          decoration:
-                                              TextDecoration.lineThrough,
-                                          decorationColor: Colors.black,
-                                          decorationThickness: 2.0,
-                                        )
-                                      : null,
-                                ),
-
-                                leading: IconButton(
-                                  onPressed: () =>
-                                      todosCubit.toggleTodoStatus(todo.id),
-                                  icon: Icon(
-                                    todo.completed
-                                        ? Icons.check_box
-                                        : Icons.check_box_outline_blank,
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        } else {
-                          return const Text('Press the button to load todos.');
-                        }
-                      },
-                    ),
-                  ),
-                  onRefresh: () => todosCubit.loadTodos(),
-                );
-              }, childCount: 1),
-            ),
           ],
-
-          // RefreshIndicator(
-          //   onRefresh: () => todosCubit.loadTodos(),
-          //   child: Center(
-          //     child: BlocBuilder<TodosCubit, TodosState>(
-          //       builder: (context, state) {
-          //         if (state.status == TodoStatus.loading) {
-          //           return const CircularProgressIndicator();
-          //         } else if (state.status == TodoStatus.failure) {
-          //           return Text(state.errorMessage);
-          //         } else if (state.status == TodoStatus.success) {
-          //           return ListView.builder(
-          //             itemCount: state.todos.length,
-          //             itemBuilder: (context, index) {
-          //               final todo = state.todos[index];
-          //               return ListTile(
-          //                 title: Text(
-          //                   todo.todo,
-          //                   style: todo.completed
-          //                       ? TextStyle(
-          //                           fontWeight: FontWeight.bold,
-          //                           decoration: TextDecoration.lineThrough,
-          //                           decorationColor: Colors.black,
-          //                           decorationThickness: 2.0,
-          //                         )
-          //                       : null,
-          //                 ),
-
-          //                 leading: IconButton(
-          //                   onPressed: () =>
-          //                       todosCubit.toggleTodoStatus(todo.id),
-          //                   icon: Icon(
-          //                     todo.completed
-          //                         ? Icons.check_box
-          //                         : Icons.check_box_outline_blank,
-          //                   ),
-          //                 ),
-          //               );
-          //             },
-          //           );
-          //         } else {
-          //           return const Text('Press the button to load todos.');
-          //         }
-          //       },
-          //     ),
-          //   ),
-          // ),
         ),
+
+        // RefreshIndicator(
+        //   onRefresh: () => todosCubit.loadTodos(),
+        //   child: Center(
+        //     child: BlocBuilder<TodosCubit, TodosState>(
+        //       builder: (context, state) {
+        //         if (state.status == TodoStatus.loading) {
+        //           return const CircularProgressIndicator();
+        //         } else if (state.status == TodoStatus.failure) {
+        //           return Text(state.errorMessage);
+        //         } else if (state.status == TodoStatus.success) {
+        //           return ListView.builder(
+        //             itemCount: state.todos.length,
+        //             itemBuilder: (context, index) {
+        //               final todo = state.todos[index];
+        //               return ListTile(
+        //                 title: Text(
+        //                   todo.todo,
+        //                   style: todo.completed
+        //                       ? TextStyle(
+        //                           fontWeight: FontWeight.bold,
+        //                           decoration: TextDecoration.lineThrough,
+        //                           decorationColor: Colors.black,
+        //                           decorationThickness: 2.0,
+        //                         )
+        //                       : null,
+        //                 ),
+
+        //                 leading: IconButton(
+        //                   onPressed: () => todosCubit.toggleTodoStatus(todo.id),
+        //                   icon: Icon(
+        //                     todo.completed
+        //                         ? Icons.check_box
+        //                         : Icons.check_box_outline_blank,
+        //                   ),
+        //                 ),
+        //               );
+        //             },
+        //           );
+        //         } else {
+        //           return const Text('Press the button to load todos.');
+        //         }
+        //       },
+        //     ),
+        //   ),
+        // ),
       ),
     );
   }
