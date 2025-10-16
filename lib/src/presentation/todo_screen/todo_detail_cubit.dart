@@ -15,6 +15,8 @@ class TodoDetailCubit extends Cubit<TodoDetailState> {
   late UpdateTodoUseCase _updateTodoUseCase;
   final ImagePicker _imagePicker = ImagePicker();
 
+  late TodoDetail todoDetail;
+
   TodoDetailCubit() : super(const TodoDetailState());
 
   // Load todo detail
@@ -24,10 +26,12 @@ class TodoDetailCubit extends Cubit<TodoDetailState> {
 
     if (state.status == TodoDetailStatus.success) return;
     {
+      todoDetail = TodoDetail.fromTodo(todo);
+
       emit(
         state.copyWith(
           status: TodoDetailStatus.success,
-          todoDetail: TodoDetail.fromTodo(todo),
+          todoDetail: todoDetail,
           errorMessage: '',
         ),
       );
@@ -50,6 +54,7 @@ class TodoDetailCubit extends Cubit<TodoDetailState> {
     final updatedTodo = state.todoDetail!.copyWith(
       completed: !state.todoDetail!.completed,
     );
+    // todoDetail.completed = updatedTodo.completed;
     emit(state.copyWith(todoDetail: updatedTodo));
   }
 
