@@ -43,33 +43,51 @@ class TodosPage extends StatelessWidget {
                                   ),
                                 );
                               },
-                              child: ListTile(
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    '/todoDetail',
-                                    arguments: todo,
-                                  );
-                                },
-                                title: Text(
-                                  todo.todo,
-                                  style: todo.completed
-                                      ? TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          decoration:
-                                              TextDecoration.lineThrough,
-                                          decorationColor: Colors.black,
-                                          decorationThickness: 2.0,
-                                        )
-                                      : null,
-                                ),
-                                leading: IconButton(
-                                  onPressed: () =>
-                                      todosCubit.toggleTodoStatus(todo.id),
-                                  icon: Icon(
-                                    todo.completed
-                                        ? Icons.check_box
-                                        : Icons.check_box_outline_blank,
+                              child: SizedBox(
+                                height: 100.0,
+                                child: ListTile(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      '/todoDetail',
+                                      arguments: todo,
+                                    );
+                                  },
+                                  title: Text(
+                                    todo.todo,
+                                    style: todo.completed
+                                        ? TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            decoration:
+                                                TextDecoration.lineThrough,
+                                            decorationColor: Colors.black,
+                                            decorationThickness: 2.0,
+                                          )
+                                        : null,
+                                  ),
+
+                                  leading: IconButton(
+                                    onPressed: () =>
+                                        todosCubit.toggleTodoStatus(todo.id),
+                                    icon: Icon(
+                                      todo.completed
+                                          ? Icons.check_box
+                                          : Icons.check_box_outline_blank,
+                                    ),
+                                  ),
+                                  trailing: IconButton(
+                                    onPressed: () {
+                                      context.read<TodosCubit>().toggleFavorite(
+                                        todo.id,
+                                      );
+                                    },
+                                    icon: Icon(
+                                      (todo.isFavorite != null &&
+                                              todo.isFavorite == true)
+                                          ? Icons.star
+                                          : Icons.star_border,
+                                      color: Colors.amberAccent,
+                                    ),
                                   ),
                                 ),
                               ),

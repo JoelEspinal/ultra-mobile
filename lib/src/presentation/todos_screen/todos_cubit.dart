@@ -65,6 +65,24 @@ class TodosCubit extends Cubit<TodosState> {
     );
   }
 
+  // Toggle favorite status
+  void toggleFavorite(int todoId) {
+    if (state.todos.isEmpty) return;
+
+    final updatedTodos = state.todos.map((todo) {
+      return todo.id == todoId
+          ? todo.copyWith(
+              isFavorite: todo.isFavorite != null && todo.isFavorite == true
+                  ? false
+                  : true,
+            )
+          : todo;
+    }).toList();
+
+    // Emit a new success state immediately for optimistic UI update
+    emit(state.copyWith(todos: updatedTodos));
+  }
+
   void deleteTodo(int todoId) async {
     if (state.status == TodoStatus.loading) return;
 
