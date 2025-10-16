@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ultra_mobile/src/presentation/home_screen/todos_cubit.dart';
+import 'presentation/home_screen/todos_cubit.dart';
 import 'data/network/todos_api/api_client.dart';
 import 'data/network/todos_api/services/todo_service.dart';
 import 'data/repositories/todo_repository_impl.dart';
