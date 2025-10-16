@@ -10,53 +10,57 @@ class TodosPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final todosCubit = context.read<TodosCubit>();
     todosCubit.loadTodos();
+
     return SafeArea(
       child: Scaffold(
         body: Stack(
           children: [
-            RefreshIndicator(
-              onRefresh: () => todosCubit.loadTodos(),
-              child: Center(
-                child: BlocBuilder<TodosCubit, TodosState>(
-                  builder: (context, state) {
-                    if (state.status == TodoStatus.loading) {
-                      return const CircularProgressIndicator();
-                    } else if (state.status == TodoStatus.failure) {
-                      return Text(state.errorMessage);
-                    } else if (state.status == TodoStatus.success) {
-                      return ListView.builder(
-                        itemCount: state.todos.length,
-                        itemBuilder: (context, index) {
-                          final todo = state.todos[index];
-                          return ListTile(
-                            title: Text(
-                              todo.todo,
-                              style: todo.completed
-                                  ? TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      decoration: TextDecoration.lineThrough,
-                                      decorationColor: Colors.black,
-                                      decorationThickness: 2.0,
-                                    )
-                                  : null,
-                            ),
-
-                            leading: IconButton(
-                              onPressed: () =>
-                                  todosCubit.toggleTodoStatus(todo.id),
-                              icon: Icon(
-                                todo.completed
-                                    ? Icons.check_box
-                                    : Icons.check_box_outline_blank,
+            Padding(
+              padding: const EdgeInsets.only(top: 100.0),
+              child: RefreshIndicator(
+                onRefresh: () => todosCubit.loadTodos(),
+                child: Center(
+                  child: BlocBuilder<TodosCubit, TodosState>(
+                    builder: (context, state) {
+                      if (state.status == TodoStatus.loading) {
+                        return const CircularProgressIndicator();
+                      } else if (state.status == TodoStatus.failure) {
+                        return Text(state.errorMessage);
+                      } else if (state.status == TodoStatus.success) {
+                        return ListView.builder(
+                          itemCount: state.todos.length,
+                          itemBuilder: (context, index) {
+                            final todo = state.todos[index];
+                            return ListTile(
+                              title: Text(
+                                todo.todo,
+                                style: todo.completed
+                                    ? TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        decoration: TextDecoration.lineThrough,
+                                        decorationColor: Colors.black,
+                                        decorationThickness: 2.0,
+                                      )
+                                    : null,
                               ),
-                            ),
-                          );
-                        },
-                      );
-                    } else {
-                      return const Text('Press the button to load todos.');
-                    }
-                  },
+
+                              leading: IconButton(
+                                onPressed: () =>
+                                    todosCubit.toggleTodoStatus(todo.id),
+                                icon: Icon(
+                                  todo.completed
+                                      ? Icons.check_box
+                                      : Icons.check_box_outline_blank,
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      } else {
+                        return const Text('Press the button to load todos.');
+                      }
+                    },
+                  ),
                 ),
               ),
             ),
@@ -80,6 +84,7 @@ class TodosPage extends StatelessWidget {
                   ],
                 ),
                 child: TextField(
+                  onChanged: (value) => todosCubit.loadTodos(value),
                   decoration: InputDecoration(
                     hintText: " todo...",
                     border: InputBorder.none,

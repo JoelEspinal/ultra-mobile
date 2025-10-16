@@ -12,7 +12,7 @@ class TodosCubit extends Cubit<TodosState> {
   TodosCubit(this._fetchTodosUseCase) : super(const TodosState());
 
   // 2. Event Handler: This method is called by the UI (the View).
-  Future<void> loadTodos() async {
+  Future<void> loadTodos([String? filter]) async {
     if (state.status == TodoStatus.loading) return;
 
     // Emit the Loading state to update the UI
@@ -47,7 +47,15 @@ class TodosCubit extends Cubit<TodosState> {
         emit(
           state.copyWith(
             status: TodoStatus.success,
-            todos: todos,
+            todos: (filter != null && filter.isNotEmpty)
+                ? todos
+                      .where(
+                        (todo) => todo.todo.toLowerCase().contains(
+                          filter.toLowerCase(),
+                        ),
+                      )
+                      .toList()
+                : todos,
             errorMessage: '',
           ),
         );
