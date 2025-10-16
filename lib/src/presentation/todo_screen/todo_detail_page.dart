@@ -77,12 +77,7 @@ class TodoDetailPage extends StatelessWidget {
                               ? Icons.star
                               : Icons.star_border
                         : Icons.star_border,
-                    color: (state.todoDetail != null)
-                        ? (state.todoDetail?.isFavorite != null &&
-                                  state.todoDetail?.isFavorite == true)
-                              ? Colors.amber
-                              : Colors.white
-                        : Colors.white,
+                    color: Colors.amberAccent,
                   ),
                 );
               }
