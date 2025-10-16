@@ -35,8 +35,9 @@ class TodoService {
     return "Todo Edited";
   }
 
-  Future<String> deleteTodo(int id) async {
-    await Future.delayed(const Duration(seconds: 2));
-    return "Todo Removed";
+  Future<Todo?> deleteTodo(int id) async {
+    final request = "${Constant.baseUrl}${Constant.todosEndpoint}/$id";
+    final response = await apiClient.dio.delete(request);
+    return response.data;
   }
 }

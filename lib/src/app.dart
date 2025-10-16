@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ultra_mobile/src/domain/use_cases/delete_todo_use_case.dart';
 import 'presentation/home_screen/todos_cubit.dart';
 import 'data/network/todos_api/api_client.dart';
 import 'data/network/todos_api/services/todo_service.dart';
@@ -29,10 +30,17 @@ class App extends StatelessWidget {
           create: (context) =>
               FetchTodosUseCase(todoRepository: context.read<TodoRepository>()),
         ),
+        Provider<DeleteTodoUseCase>(
+          create: (context) =>
+              DeleteTodoUseCase(todoRepository: context.read<TodoRepository>()),
+        ),
       ],
       child: MaterialApp(
         home: BlocProvider(
-          create: (context) => TodosCubit(context.read<FetchTodosUseCase>()),
+          create: (context) => TodosCubit(
+            context.read<FetchTodosUseCase>(),
+            context.read<DeleteTodoUseCase>(),
+          ),
           child: const TodosPage(),
         ),
       ),

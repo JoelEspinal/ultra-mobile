@@ -52,4 +52,27 @@ class TodoRepositoryImpl implements TodoRepository {
       return Left(mapExceptionToFailure(e));
     }
   }
+
+  @override
+  Future<Either<Failure, todo_entity.Todo?>> delete(int id) async {
+    try {
+      final todo = await todoService.deleteTodo(id);
+      if (todo == null) {
+        return Right(null);
+      }
+
+      final todoEntity = todo.map(
+        (t) => todo_entity.Todo(
+          id: t.id,
+          todo: t.todo,
+          completed: t.completed,
+          userId: t.userId,
+        ),
+      );
+
+      return Right(todoEntity);
+    } catch (e) {
+      return Left(mapExceptionToFailure(e));
+    }
+  }
 }

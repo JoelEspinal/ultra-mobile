@@ -31,26 +31,39 @@ class TodosPage extends StatelessWidget {
                           itemCount: state.todos.length,
                           itemBuilder: (context, index) {
                             final todo = state.todos[index];
-                            return ListTile(
-                              title: Text(
-                                todo.todo,
-                                style: todo.completed
-                                    ? TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        decoration: TextDecoration.lineThrough,
-                                        decorationColor: Colors.black,
-                                        decorationThickness: 2.0,
-                                      )
-                                    : null,
-                              ),
+                            return Dismissible(
+                              key: Key(todo.id.toString()),
+                              background: Container(color: Colors.red),
+                              onDismissed: (direction) {
+                                todosCubit.deleteTodo(todo.id);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Deleted "${todo.todo}"'),
+                                  ),
+                                );
+                              },
+                              child: ListTile(
+                                title: Text(
+                                  todo.todo,
+                                  style: todo.completed
+                                      ? TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          decoration:
+                                              TextDecoration.lineThrough,
+                                          decorationColor: Colors.black,
+                                          decorationThickness: 2.0,
+                                        )
+                                      : null,
+                                ),
 
-                              leading: IconButton(
-                                onPressed: () =>
-                                    todosCubit.toggleTodoStatus(todo.id),
-                                icon: Icon(
-                                  todo.completed
-                                      ? Icons.check_box
-                                      : Icons.check_box_outline_blank,
+                                leading: IconButton(
+                                  onPressed: () =>
+                                      todosCubit.toggleTodoStatus(todo.id),
+                                  icon: Icon(
+                                    todo.completed
+                                        ? Icons.check_box
+                                        : Icons.check_box_outline_blank,
+                                  ),
                                 ),
                               ),
                             );
@@ -86,7 +99,7 @@ class TodosPage extends StatelessWidget {
                 child: TextField(
                   onChanged: (value) => todosCubit.loadTodos(value),
                   decoration: InputDecoration(
-                    hintText: " todo...",
+                    hintText: " Search todo ...",
                     border: InputBorder.none,
                     prefixIcon: IconButton(
                       onPressed: () {},

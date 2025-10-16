@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 
 import '../../domain/use_cases/fetch_todos_use_case.dart';
+import '../../domain/use_cases/delete_todo_use_case.dart';
 import '../../domain/failures/failure.dart';
 
 import 'todos_state.dart';
@@ -8,8 +9,10 @@ import 'todos_state.dart';
 // The Cubit acts as the ViewModel
 class TodosCubit extends Cubit<TodosState> {
   final FetchTodosUseCase _fetchTodosUseCase;
+  final DeleteTodoUseCase _deleteTodoUseCase;
 
-  TodosCubit(this._fetchTodosUseCase) : super(const TodosState());
+  TodosCubit(this._fetchTodosUseCase, this._deleteTodoUseCase)
+    : super(const TodosState());
 
   // 2. Event Handler: This method is called by the UI (the View).
   Future<void> loadTodos([String? filter]) async {
@@ -61,6 +64,54 @@ class TodosCubit extends Cubit<TodosState> {
         );
       },
     );
+  }
+
+  void deleteTodo(int todoId) async {
+    if (state.status == TodoStatus.loading) return;
+
+    emit(state.copyWith(status: TodoStatus.loading));
+    final result = await _deleteTodoUseCase.execute(todoId);
+
+    result.fold(
+      (failure) {
+        String errorMessage;
+        if (failure is NetworkFailure) {
+          errorMessage = 'Check your internet connection!';
+        } else if (failure is UnauthorizedFailure) {
+          errorMessage = 'Session expired. Please log in.';
+        } else {
+          errorMessage = 'An unexpected error occurred: ${failure.message}';
+        }
+
+        // Emit the Failure state
+        emit(
+          state.copyWith(
+            status: TodoStatus.failure,
+            errorMessage: errorMessage,
+          ),
+        );
+      },
+      (todo) {
+        // On success, remove the todo from the list
+        final updatedTodos = state.todos
+            .where((todo) => todo.id != todoId)
+            .toList();
+
+        emit(
+          state.copyWith(
+            status: TodoStatus.success,
+            todos: updatedTodos,
+            errorMessage: '',
+          ),
+        );
+      },
+    );
+    final updatedTodos = state.todos
+        .where((todo) => todo.id != todoId)
+        .toList();
+
+    // Emit a new success state immediately for optimistic UI update
+    emit(state.copyWith(todos: updatedTodos));
   }
 
   // Example of another method to handle UI actions

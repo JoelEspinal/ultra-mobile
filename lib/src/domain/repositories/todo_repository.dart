@@ -5,4 +5,5 @@ import '../failures/failure.dart';
 abstract class TodoRepository {
   Future<Either<Failure, List<Todo>>> getTodos();
   Future<Either<Failure, Todo>> getTodo(int id);
+  Future<Either<Failure, Todo?>> delete(int id);
 }
