@@ -1,0 +1,51 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'todos_cubit.dart';
+import 'todos_state.dart';
+
+class TodosPage extends StatelessWidget {
+  const TodosPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final todosCubit = context.read<TodosCubit>();
+    todosCubit.loadTodos();
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Todos')),
+        body: Center(
+          child: BlocBuilder<TodosCubit, TodosState>(
+            builder: (context, state) {
+              if (state.status == TodoStatus.loading) {
+                return const CircularProgressIndicator();
+              } else if (state.status == TodoStatus.failure) {
+                return Text(state.errorMessage);
+              } else if (state.status == TodoStatus.success) {
+                return ListView.builder(
+                  itemCount: state.todos.length,
+                  itemBuilder: (context, index) {
+                    final todo = state.todos[index];
+                    return ListTile(
+                      title: Text(todo.todo),
+
+                      leading: IconButton(
+                        onPressed: () => todosCubit.toggleTodoStatus(todo.id),
+                        icon: Icon(
+                          todo.completed
+                              ? Icons.check_box
+                              : Icons.check_box_outline_blank,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              } else {
+                return const Text('Press the button to load todos.');
+              }
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
