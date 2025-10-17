@@ -32,15 +32,20 @@ class TodoLocalDataSourceImpl implements TodoLocalDataSource {
   @override
   Todo? getTodo(int todoId) {
     TodoModel? todoModel = _todoBox.get(todoId);
-    if (todoModel == null) return null;
 
-    return todoModel.toEntity();
+    if (todoModel == null) return null;
+    var result = todoModel.toEntity();
+    return result;
   }
 
   @override
   Future<void> addTodo(Todo todo) async {
-    final todoModel = TodoModel.fromEntity(todo);
+    TodoModel todoModel = TodoModel.fromEntity(todo);
     // Hive uses the model's type ID (0 in this case) and saves it
+    // await _todoBox.put(todo.id, todoModel);
+
+    int id = await _todoBox.add(todoModel);
+    if (id == 0) todoModel.id = todo.id;
     await _todoBox.put(todo.id, todoModel);
   }
 
