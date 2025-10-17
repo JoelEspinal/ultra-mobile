@@ -3,13 +3,12 @@ import '../../../../domain/entities/todo.dart'; // Import the Domain Entity
 
 part 'todo_model.g.dart';
 
-// The TodoModel no longer extends Todo, promoting better separation.
-@HiveType(typeId: 0)
+@HiveType(typeId: 1)
 class TodoModel {
   // 1. Redefine all final fields directly within the model.
 
   @HiveField(0)
-  final int id;
+  int id;
 
   @HiveField(1)
   final String todo;
@@ -49,7 +48,7 @@ class TodoModel {
 
   // 2. Define a standard constructor for the model.
   // NOTE: 'required' is removed, so default values must be provided for non-nullable final fields.
-  const TodoModel({
+  TodoModel({
     this.id = 0,
     this.todo = '',
     this.completed = false,
