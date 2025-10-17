@@ -73,9 +73,9 @@ class TodoDetailPage extends StatelessWidget {
                   icon: Icon(
                     (state.todoDetail != null)
                         ? (state.todoDetail?.isFavorite != null &&
-                                  state.todoDetail?.isFavorite == true)
-                              ? Icons.star
-                              : Icons.star_border
+                                state.todoDetail?.isFavorite == true)
+                            ? Icons.star
+                            : Icons.star_border
                         : Icons.star_border,
                     color: Colors.amberAccent,
                   ),
@@ -198,8 +198,8 @@ class TodoDetailPage extends StatelessWidget {
                             icon: const Icon(Icons.clear),
                             onPressed: () {
                               context.read<TodoDetailCubit>().updateDueDate(
-                                null,
-                              );
+                                    null,
+                                  );
                             },
                           )
                         : null,
@@ -237,8 +237,8 @@ class TodoDetailPage extends StatelessWidget {
                         onChanged: (Priority? value) {
                           if (value != null) {
                             context.read<TodoDetailCubit>().updatePriority(
-                              value,
-                            );
+                                  value,
+                                );
                           }
                         },
                         secondary: Icon(
@@ -374,8 +374,8 @@ class TodoDetailPage extends StatelessWidget {
                             time.minute,
                           );
                           context.read<TodoDetailCubit>().setReminder(
-                            reminderDateTime,
-                          );
+                                reminderDateTime,
+                              );
                         }
                       }
                     },

@@ -65,7 +65,6 @@ class TodosPage extends StatelessWidget {
                                           )
                                         : null,
                                   ),
-
                                   leading: IconButton(
                                     onPressed: () =>
                                         todosCubit.toggleTodoStatus(todo.id),
@@ -78,8 +77,8 @@ class TodosPage extends StatelessWidget {
                                   trailing: IconButton(
                                     onPressed: () {
                                       context.read<TodosCubit>().toggleFavorite(
-                                        todo.id,
-                                      );
+                                            todo.id,
+                                          );
                                     },
                                     icon: Icon(
                                       (todo.isFavorite != null &&

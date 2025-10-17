@@ -11,7 +11,7 @@ class TodosCubit extends Cubit<TodosState> {
   final DeleteTodoUseCase _deleteTodoUseCase;
 
   TodosCubit(this._fetchTodosUseCase, this._deleteTodoUseCase)
-    : super(const TodosState());
+      : super(const TodosState());
 
   // 2. Event Handler: This method is called by the UI (the View).
   Future<void> loadTodos([String? filter]) async {
@@ -51,12 +51,12 @@ class TodosCubit extends Cubit<TodosState> {
             status: TodoStatus.success,
             todos: (filter != null && filter.isNotEmpty)
                 ? todos
-                      .where(
-                        (todo) => todo.todo.toLowerCase().contains(
-                          filter.toLowerCase(),
-                        ),
-                      )
-                      .toList()
+                    .where(
+                      (todo) => todo.todo.toLowerCase().contains(
+                            filter.toLowerCase(),
+                          ),
+                    )
+                    .toList()
                 : todos,
             errorMessage: '',
           ),
@@ -110,9 +110,8 @@ class TodosCubit extends Cubit<TodosState> {
       },
       (todo) {
         // On success, remove the todo from the list
-        final updatedTodos = state.todos
-            .where((todo) => todo.id != todoId)
-            .toList();
+        final updatedTodos =
+            state.todos.where((todo) => todo.id != todoId).toList();
 
         emit(
           state.copyWith(
@@ -123,9 +122,8 @@ class TodosCubit extends Cubit<TodosState> {
         );
       },
     );
-    final updatedTodos = state.todos
-        .where((todo) => todo.id != todoId)
-        .toList();
+    final updatedTodos =
+        state.todos.where((todo) => todo.id != todoId).toList();
 
     // Emit a new success state immediately for optimistic UI update
     emit(state.copyWith(todos: updatedTodos));
