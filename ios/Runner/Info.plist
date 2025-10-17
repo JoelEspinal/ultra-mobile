@@ -4,6 +4,10 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This app needs access to your camera to capture photos for your to-do items</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>CFBundleDisplayName</key>
 	<string>Ultra Mobile</string>
 	<key>CFBundleExecutable</key>
@@ -43,6 +47,10 @@
 	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>his app needs access to your photo library to select images for your to-do items.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>his app needs access to save photos taken directly to your photo library.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 </dict>
