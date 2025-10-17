@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
+import 'data/database/hive/data_source/todo_local_data_source.dart';
+import 'data/repositories/persistence_repository_impl.dart';
+import 'domain/repositories/persistence_repository.dart';
 import 'domain/use_cases/delete_todo_use_case.dart';
 import 'domain/use_cases/update_todo_use_case.dart';
 import 'presentation/todo_screen/todo_detail_cubit.dart';
@@ -32,9 +35,17 @@ class App extends StatelessWidget {
           create: (context) =>
               TodoRepositoryImpl(todoService: context.read<TodoService>()),
         ),
+        Provider<TodoLocalDataSource>(
+          create: (context) => TodoLocalDataSourceImpl(),
+        ),
+        Provider<PersistenceRepository>(
+          create: (context) => PersistenceRepositoryImpl(
+              localDataSource: context.read<TodoLocalDataSource>()),
+        ),
         Provider<FetchTodosUseCase>(
-          create: (context) =>
-              FetchTodosUseCase(todoRepository: context.read<TodoRepository>()),
+          create: (context) => FetchTodosUseCase(
+              todoRepository: context.read<TodoRepository>(),
+              persistenceRepository: context.read<PersistenceRepository>()),
         ),
         Provider<DeleteTodoUseCase>(
           create: (context) =>
@@ -48,12 +59,12 @@ class App extends StatelessWidget {
       child: MaterialApp(
         routes: {
           '/': (context) => BlocProvider(
-            create: (context) => TodosCubit(
-              context.read<FetchTodosUseCase>(),
-              context.read<DeleteTodoUseCase>(),
-            ),
-            child: const TodosPage(),
-          ),
+                create: (context) => TodosCubit(
+                  context.read<FetchTodosUseCase>(),
+                  context.read<DeleteTodoUseCase>(),
+                ),
+                child: const TodosPage(),
+              ),
         },
         onGenerateRoute: (settings) {
           if (settings.name == '/todoDetail') {

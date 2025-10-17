@@ -8,6 +8,7 @@ import '../models/todo_model.dart';
 // Define the contract (interface) for the local data source
 abstract class TodoLocalDataSource {
   Future<void> addTodo(Todo todo);
+  Todo? getTodo(int todoId);
   Future<List<Todo>> getTodos();
   Future<void> updateTodo(Todo todo);
   Future<void> deleteTodo(int id);
@@ -27,6 +28,14 @@ class TodoLocalDataSourceImpl implements TodoLocalDataSource {
   }
 
   Box<TodoModel> get _todoBox => Hive.box<TodoModel>(_todoBoxName);
+
+  @override
+  Todo? getTodo(int todoId) {
+    TodoModel? todoModel = _todoBox.get(todoId);
+    if (todoModel == null) return null;
+
+    return todoModel.toEntity();
+  }
 
   @override
   Future<void> addTodo(Todo todo) async {
