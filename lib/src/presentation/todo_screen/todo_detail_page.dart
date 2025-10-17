@@ -130,8 +130,8 @@ class TodoDetailPage extends StatelessWidget {
                 // Replaced TextEditingController with initialValue and onChanged
                 TextFormField(
                   // Key ensures the TextFormField is reset/rebuilt when the BLoC state object changes
-                  key: ValueKey(todo.id),
-                  initialValue: todo.todo,
+                  key: ValueKey(state.todoDetail?.id),
+                  initialValue: state.todoDetail?.todo,
                   onChanged: (value) {
                     context.read<TodoDetailCubit>().updateTitle(value);
                   },
@@ -158,7 +158,7 @@ class TodoDetailPage extends StatelessWidget {
                       state.todoDetail!.completed
                           ? Icons.check_circle
                           : Icons.radio_button_unchecked,
-                      color: todo.completed ? Colors.green : null,
+                      color: state.todoDetail!.completed ? Colors.green : null,
                     ),
                   ),
                 ),
@@ -168,7 +168,7 @@ class TodoDetailPage extends StatelessWidget {
                 _buildSectionTitle('Description'),
                 // Replaced TextEditingController with initialValue and onChanged
                 TextFormField(
-                  key: ValueKey('${todo.id}_desc'),
+                  key: ValueKey('${state.todoDetail?.id}_desc'),
                   initialValue: state.todoDetail!.description,
                   onChanged: (value) {
                     context.read<TodoDetailCubit>().updateDescription(value);
@@ -193,7 +193,7 @@ class TodoDetailPage extends StatelessWidget {
                             ).format(state.todoDetail!.dueDate!)
                           : 'No due date set',
                     ),
-                    trailing: todo.dueDate != null
+                    trailing: state.todoDetail?.dueDate != null
                         ? IconButton(
                             icon: const Icon(Icons.clear),
                             onPressed: () {
@@ -206,7 +206,8 @@ class TodoDetailPage extends StatelessWidget {
                     onTap: () async {
                       final date = await showDatePicker(
                         context: context,
-                        initialDate: todo.dueDate ?? DateTime.now(),
+                        initialDate:
+                            state.todoDetail?.dueDate ?? DateTime.now(),
                         firstDate: DateTime.now(),
                         lastDate: DateTime.now().add(
                           const Duration(days: 365 * 5),
@@ -270,14 +271,14 @@ class TodoDetailPage extends StatelessWidget {
                 // Image Attachment Section (Using imagePath property)
                 _buildSectionTitle('Attachment'),
                 // Added a check to ensure the file exists before attempting to load
-                if (todo.imagePath != null &&
-                    File(todo.imagePath!).existsSync()) ...[
+                if (state.todoDetail?.imagePath != null &&
+                    File(state.todoDetail!.imagePath!).existsSync()) ...[
                   Stack(
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(12),
                         child: Image.file(
-                          File(todo.imagePath!),
+                          File(state.todoDetail!.imagePath!),
                           width: double.infinity,
                           height: 200,
                           fit: BoxFit.cover,
