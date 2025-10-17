@@ -24,8 +24,9 @@ class PersistenceRepositoryImpl implements PersistenceRepository {
   }
 
   @override
-  todo_entity.Todo? getTodo(int id) {
-    return localDataSource.getTodo(id);
+  Future<todo_entity.Todo?> getTodo(int id) async {
+    var value = localDataSource.getTodo(id);
+    return value;
   }
 
   @override
