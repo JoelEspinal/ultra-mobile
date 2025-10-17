@@ -18,12 +18,13 @@ class FetchTodosUseCase {
     if (todos.isRight()) {
       todos.fold(
         (l) {},
-        (r) {
+        (r) async {
           for (var todoElement in r) {
             todo_entity.Todo? todo =
-                persistenceRepository.getTodo(todoElement.id);
+                await persistenceRepository.getTodo(todoElement.id);
+
             if (todo == null) {
-              persistenceRepository.saveTodo(todoElement);
+              await persistenceRepository.saveTodo(todoElement);
             }
           }
         },
@@ -31,6 +32,9 @@ class FetchTodosUseCase {
     }
 
     var todoList = await persistenceRepository.getTodos();
+    var leng = todoList.length;
+
+    if (todoList.isEmpty) return todos;
 
     return Future(() => Right(todoList));
   }
