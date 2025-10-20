@@ -5,7 +5,6 @@ part 'todo_model.g.dart';
 
 @HiveType(typeId: 0)
 class TodoModel extends HiveObject {
-  // 1. Redefine all final fields directly within the model.
 
   @HiveField(0)
   int localId;
