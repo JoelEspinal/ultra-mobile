@@ -3,52 +3,56 @@ import '../../../../domain/entities/todo.dart'; // Import the Domain Entity
 
 part 'todo_model.g.dart';
 
-@HiveType(typeId: 1)
-class TodoModel {
+@HiveType(typeId: 0)
+class TodoModel extends HiveObject {
   // 1. Redefine all final fields directly within the model.
 
   @HiveField(0)
-  int id;
+  int localId;
 
   @HiveField(1)
-  final String todo;
+  int id;
 
   @HiveField(2)
-  final bool completed;
+  String todo;
 
   @HiveField(3)
-  final int userId;
+  bool completed;
 
   @HiveField(4)
-  final String? description;
+  int userId;
 
   @HiveField(5)
-  final DateTime? dueDate;
+  String? description;
 
   @HiveField(6)
-  final int? priority;
+  DateTime? dueDate;
 
   @HiveField(7)
-  final String? category;
+  int? priority;
 
   @HiveField(8)
-  final String? imagePath;
+  String? category;
 
   @HiveField(9)
-  final DateTime? reminderTime;
+  String? imagePath;
 
   @HiveField(10)
-  final bool? isFavorite;
+  DateTime? reminderTime;
 
   @HiveField(11)
-  final String? createdAt;
+  bool? isFavorite;
 
   @HiveField(12)
-  final String? updatedAt;
+  String? createdAt;
+
+  @HiveField(13)
+  String? updatedAt;
 
   // 2. Define a standard constructor for the model.
   // NOTE: 'required' is removed, so default values must be provided for non-nullable final fields.
   TodoModel({
+    this.localId = 0,
     this.id = 0,
     this.todo = '',
     this.completed = false,
