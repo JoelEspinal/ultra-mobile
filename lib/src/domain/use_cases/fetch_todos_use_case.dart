@@ -15,28 +15,27 @@ class FetchTodosUseCase {
   Future<Either<Failure, List<todo_entity.Todo>>> execute() async {
     final todos = await todoRepository.getTodos();
 
-    // if (todos.isRight()) {
-    //   todos.fold(
-    //     (l) {},
-    //     (r) async {
-    //       for (var todoElement in r) {
-    //         todo_entity.Todo? todo =
-    //             await persistenceRepository.getTodo(todoElement.id);
+    if (todos.isRight()) {
+      todos.fold(
+        (l) {},
+        (r) async {
+          bool toGet = false;
+          for (var todoElement in r) {
+            todo_entity.Todo? todo =
+                await persistenceRepository.getTodo(todoElement.id);
+            if (todo == null) {
+              await persistenceRepository.saveTodo(todoElement);
+              toGet = true;
+            }
+          }
 
-    //         if (todo == null) {
-    //           await persistenceRepository.saveTodo(todoElement);
-    //         }
-    //       }
-    //     },
-    //   );
-    // }
-
-    // var todoList = await persistenceRepository.getTodos();
-    // var leng = todoList.length;
-
-    // if (todoList.isEmpty) return todos;
-
-    // return Future(() => Right(todoList));
+          if (toGet) {
+            var todoList = await persistenceRepository.getTodos();
+            return Future(() => Right(todoList));
+          }
+        },
+      );
+    }
 
     return todos;
   }
