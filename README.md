@@ -1,6 +1,6 @@
 
 
-📱 Ultra Mobile: Gestión de Tareas (Demo)
+📱 Ultra Mobile App: Gestión de Tareas (Demo)
 
 Este proyecto es una aplicación de demostración de manejo de tareas (To-Do List) desarrollada en Flutter. Su objetivo principal es demostrar la implementación de una Arquitectura Limpia (Clean Architecture) con un enfoque en la inmutabilidad, la gestión avanzada de estados y la persistencia local robusta.
 
@@ -40,63 +40,36 @@ DartZ (Either): Implementación de la librería dartz para un manejo funcional y
 
 Persistencia Local (Hive): Elegido por su rendimiento y su naturaleza de base de datos NoSQL Key-Value, ideal para almacenamiento local simple y rápido.
 
-Pendiente:
-Generación de IDs Únicos: La generación de IDs (utilizando DateTime.now().millisecondsSinceEpoch) se realiza en la Business Logic Layer (Cubit) para asegurar que cada nueva tarea tenga un ID único y no persista con el ID de valor 0, previniendo errores de sobreescritura de datos en Hive.
-
 Inmutabilidad: Uso de la librería freezed para Entidades y Modelos, garantizando que los objetos sean inmutables y facilitando su comparación (equatable).
 
 📦 Dependencias y Librerías (Estabilizadas)
 
 Se presenta la lista de dependencias con versiones ajustadas para resolver conflictos comunes con build_runner (específicamente entre freezed y source_gen).
 
-Categoría
-
-Paquete
-
-Versión Recomendada
-
-Notas
-
-Generación (dev)
-
+Motor de generación de código:
 build_runner: ^2.7.0
 
-Motor de generación de código.
-
-Generación (dev)
-
+Generación (dev):
 freezed: ^4.0.0
 
-Inmutabilidad de Entidades y Modelos.
 
-Persistencia
-
+Persistencia - Base de datos local:
 hive_ce_generator: ^1.10.0
 hive_flutter: ^1.1.0
 
-Base de datos local.
-
-Estado
-
+Gestión de estados:
 flutter_bloc: ^9.1.1
 bloc: ^9.1.0
 
-Gestión de estados.
-
-Funcional
+Funcional - Manejo funcional de errores (Either):
 
 dartz: ^0.10.1
 
-Manejo funcional de errores (Either).
-
-Utilidades
-
+Utilidades - Captura y selección de imágenes:
 image_picker: ^1.2.0
 
-Captura y selección de imágenes.
 
 Otros
-
 provider: ^6.1.5+1
 dio: ^5.9.0 
 intl: ^0.20.2
