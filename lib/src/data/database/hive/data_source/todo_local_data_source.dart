@@ -34,18 +34,34 @@ class TodoLocalDataSourceImpl implements TodoLocalDataSource {
 
   @override
   Todo? getTodo(int todoId) {
-    TodoModel? todoModel = _todoBox.get(todoId);
+    // TodoModel? todoModel = _todoBox.get(todoId);
 
-    if (todoModel == null) return null;
-    var result = todoModel.toEntity();
-    return result;
+    final iterableTodo =
+        _todoBox.values.where((element) => element.id == todoId);
+    final todo = iterableTodo.firstOrNull;
+    if (todo != null) {
+      final todoEntity = todo.toEntity();
+      return todoEntity;
+    }
+
+    return null;
+
+    // if(todo != null) {
+    //     final resultTodo =
+    // }
+    // if (todoModel == null) return null;
+    // var result = todoModel.toEntity();
+    // return result;
   }
 
   @override
   Future<void> addTodo(Todo todo) async {
     TodoModel todoModel = TodoModel.fromEntity(todo);
+
     // Hive uses the model's type ID (0 in this case) and saves it
-    await _todoBox.put(todoModel.id, todoModel);
+    // await _todoBox.put(todoModel.id, todoModel);
+
+    final id = await _todoBox.add(todoModel);
 
     /**
      * After save a new TodoModel
@@ -53,18 +69,29 @@ class TodoLocalDataSourceImpl implements TodoLocalDataSource {
      * 2. Update TodoModel.id if localTodo id is equal cero
      * 3. Save todoModel with updated id
      */
-    TodoModel? localTodo = _todoBox.get(todoModel.id);
-    if (localTodo?.id == 0) {
+    final iterableTodo = _todoBox.values.where((model) => model.id == todo.id);
+    final localTodo = iterableTodo.firstOrNull;
+
+    if (localTodo != null && id == 0) {
       todoModel.id = todo.id;
+      todoModel.localId = todo.id;
+
       await todoModel.save();
     }
+
+    return;
   }
 
   @override
   Future<List<Todo>> getTodos() async {
     // Get all TodoModels, map them back to domain Entities
-    final todoList = _todoBox.values.map((model) => model.toEntity()).toList();
-    return todoList;
+    if (_todoBox.values.isEmpty) {
+      final todoList =
+          _todoBox.values.map((model) => model.toEntity()).toList();
+      return todoList;
+    } else {
+      return Future.value([]);
+    }
   }
 
   @override
