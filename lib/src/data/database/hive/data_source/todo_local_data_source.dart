@@ -23,7 +23,10 @@ class TodoLocalDataSourceImpl implements TodoLocalDataSource {
     // Hive initialization usually happens in main()
     // await Hive.initFlutter();
     // This registration now works because todo_model.g.dart is imported.
+
+    //TODO Separete registration adapters
     Hive.registerAdapter(TodoModelAdapter());
+
     await Hive.openBox<TodoModel>(_todoBoxName);
   }
 
@@ -42,17 +45,26 @@ class TodoLocalDataSourceImpl implements TodoLocalDataSource {
   Future<void> addTodo(Todo todo) async {
     TodoModel todoModel = TodoModel.fromEntity(todo);
     // Hive uses the model's type ID (0 in this case) and saves it
-    // await _todoBox.put(todo.id, todoModel);
+    await _todoBox.put(todoModel.id, todoModel);
 
-    int id = await _todoBox.add(todoModel);
-    if (id == 0) todoModel.id = todo.id;
-    await _todoBox.put(todo.id, todoModel);
+    /**
+     * After save a new TodoModel
+     * 1. Get record from database
+     * 2. Update TodoModel.id if localTodo id is equal cero
+     * 3. Save todoModel with updated id
+     */
+    TodoModel? localTodo = _todoBox.get(todoModel.id);
+    if (localTodo?.id == 0) {
+      todoModel.id = todo.id;
+      await todoModel.save();
+    }
   }
 
   @override
   Future<List<Todo>> getTodos() async {
     // Get all TodoModels, map them back to domain Entities
-    return _todoBox.values.map((model) => model.toEntity()).toList();
+    final todoList = _todoBox.values.map((model) => model.toEntity()).toList();
+    return todoList;
   }
 
   @override
