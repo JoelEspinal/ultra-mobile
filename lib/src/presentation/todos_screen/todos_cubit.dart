@@ -87,6 +87,7 @@ class TodosCubit extends Cubit<TodosState> {
     if (state.status == TodoStatus.loading) return;
 
     emit(state.copyWith(status: TodoStatus.loading));
+
     final result = await _deleteTodoUseCase.execute(todoId);
 
     result.fold(
@@ -122,11 +123,6 @@ class TodosCubit extends Cubit<TodosState> {
         );
       },
     );
-    final updatedTodos =
-        state.todos.where((todo) => todo.id != todoId).toList();
-
-    // Emit a new success state immediately for optimistic UI update
-    emit(state.copyWith(todos: updatedTodos));
   }
 
   // Example of another method to handle UI actions
