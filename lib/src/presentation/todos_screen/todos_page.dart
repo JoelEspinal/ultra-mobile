@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../widgets/show_bottom_confirmation_sheet.dart';
 import 'todos_cubit.dart';
 import 'todos_state.dart';
 
@@ -35,13 +36,19 @@ class TodosPage extends StatelessWidget {
                             return Dismissible(
                               key: Key(todo.id.toString()),
                               background: Container(color: Colors.red),
-                              onDismissed: (direction) {
-                                todosCubit.deleteTodo(todo.id);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('Deleted "${todo.todo}"'),
-                                  ),
+                              confirmDismiss: (direction) async {
+                                showBottomConfirmationSheet(
+                                  context,
+                                  onConfirm: () {
+                                    todosCubit.deleteTodo(todo.id);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Deleted "${todo.todo}"'),
+                                      ),
+                                    );
+                                  },
                                 );
+                                return null;
                               },
                               child: SizedBox(
                                 height: 100.0,
