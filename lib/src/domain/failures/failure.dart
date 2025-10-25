@@ -18,21 +18,25 @@ class CacheFailure extends Failure {
 
 class NetworkFailure extends Failure {
   const NetworkFailure()
-    : super('No Internet Connection. Please check your network.');
+      : super('No Internet Connection. Please check your network.');
 }
 
 // 2. API-Specific Failures (often mapped from 4xx/5xx codes)
 class UnauthorizedFailure extends Failure {
   const UnauthorizedFailure()
-    : super('Authentication failed. Please log in again.');
+      : super('Authentication failed. Please log in again.');
 }
 
 class NotFoundFailure extends Failure {
   const NotFoundFailure(String resource)
-    : super('$resource was not found on the server.');
+      : super('$resource was not found on the server.');
 }
 
 class InvalidDataFailure extends Failure {
   const InvalidDataFailure()
-    : super('The server returned invalid or unexpected data.');
+      : super('The server returned invalid or unexpected data.');
+}
+
+class ValidationFailure extends Failure {
+  const ValidationFailure() : super("Todo title cannot be empty.");
 }
