@@ -35,7 +35,6 @@ class TodoLocalDataSourceImpl implements TodoLocalDataSource {
   @override
   Todo? getTodo(int todoId) {
     // TodoModel? todoModel = _todoBox.get(todoId);
-
     final iterableTodo =
         _todoBox.values.where((element) => element.id == todoId);
     final todo = iterableTodo.firstOrNull;
@@ -85,7 +84,7 @@ class TodoLocalDataSourceImpl implements TodoLocalDataSource {
   @override
   Future<List<Todo>> getTodos() async {
     // Get all TodoModels, map them back to domain Entities
-    if (_todoBox.values.isEmpty) {
+    if (_todoBox.values.isNotEmpty) {
       final todoList =
           _todoBox.values.map((model) => model.toEntity()).toList();
       return todoList;
@@ -98,7 +97,36 @@ class TodoLocalDataSourceImpl implements TodoLocalDataSource {
   Future<void> updateTodo(Todo todo) async {
     final todoModel = TodoModel.fromEntity(todo);
     // Use put with the key (ID) to overwrite the existing record
-    await _todoBox.put(todo.id, todoModel);
+    final iterableTodo = _todoBox.values.where((model) => model.id == todo.id);
+    var localTodo = iterableTodo.firstOrNull;
+
+    var boxValues = _todoBox.values.toList();
+
+    if (localTodo != null) {
+      // todoModel.id = todo.id;
+      // var localId = localTodo.localId;
+
+      localTodo.todo = todo.todo;
+      // await localTodo.save();
+
+      await localTodo.save();
+
+      // await _todoBox.put(localTodo.key, localTodo);
+
+      // await localTodo.save();
+
+      // await todoModel.save();
+      // await _todoBox.put(localId, todoModel);
+
+      var boxValues2 = _todoBox.values.toList();
+
+      // await localTodo.save();
+
+      var boxValues3 = _todoBox.values.toList();
+
+      // await todoModel.save();
+      // await _todoBox.put(todo.id, todoModel);
+    }
   }
 
   @override
