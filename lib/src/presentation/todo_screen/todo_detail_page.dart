@@ -86,13 +86,13 @@ class TodoDetailPage extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(Icons.save),
-            onPressed: () {
-              // TODO Pending implementation of save functionality
-              // context.read<TodoDetailCubit>().saveTodo();
+            onPressed: () async {
+              await context.read<TodoDetailCubit>().saveTodo();
+              // Navigator.of(context).pop(true);
 
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Saving changes...')),
-              );
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //   const SnackBar(content: Text('Saving changes...')),
+              // );
             },
           ),
         ],
@@ -118,7 +118,11 @@ class TodoDetailPage extends StatelessWidget {
             return const Center(child: Text('No todo found'));
           }
 
-          if (state.status == TodoDetailStatus.success) {}
+          if (state.status == TodoDetailStatus.success) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Saving changes...  ')),
+            );
+          }
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
