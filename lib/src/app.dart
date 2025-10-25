@@ -6,6 +6,7 @@ import 'data/database/hive/data_source/todo_local_data_source.dart';
 import 'data/repositories/persistence_repository_impl.dart';
 import 'domain/repositories/persistence_repository.dart';
 import 'domain/use_cases/delete_todo_use_case.dart';
+import 'domain/use_cases/fetch_todo_use_case.dart';
 import 'domain/use_cases/update_todo_use_case.dart';
 import 'presentation/todo_screen/todo_detail_cubit.dart';
 import 'presentation/todo_screen/todo_detail_page.dart';
@@ -52,8 +53,9 @@ class App extends StatelessWidget {
               DeleteTodoUseCase(todoRepository: context.read<TodoRepository>()),
         ),
         Provider<UpdateTodoUseCase>(
-          create: (context) =>
-              UpdateTodoUseCase(todoRepository: context.read<TodoRepository>()),
+          create: (context) => UpdateTodoUseCase(
+              todoRepository: context.read<TodoRepository>(),
+              persistenceRepository: context.read<PersistenceRepository>()),
         ),
       ],
       child: MaterialApp(
@@ -62,7 +64,8 @@ class App extends StatelessWidget {
                 create: (context) => TodosCubit(
                   context.read<FetchTodosUseCase>(),
                   context.read<DeleteTodoUseCase>(),
-                ),
+                  // ),
+                )..loadTodos(),
                 child: const TodosPage(),
               ),
         },
@@ -71,7 +74,10 @@ class App extends StatelessWidget {
             final todo = settings.arguments as entity_todo.Todo;
             return MaterialPageRoute(
               builder: (context) => BlocProvider(
-                create: (context) => TodoDetailCubit(),
+                create: (context) => TodoDetailCubit(
+                    updateTodoUseCase: context.read<UpdateTodoUseCase>(),
+                    fetchTodoDetailUseCase:
+                        context.read<FetchTodoDetailUseCase>()),
                 child: TodoDetailPage(todo: todo),
               ),
             );
