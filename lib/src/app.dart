@@ -13,8 +13,8 @@ import 'presentation/todo_screen/todo_detail_page.dart';
 import '../../src/domain/entities/todo.dart' as entity_todo;
 import 'data/network/todos_api/api_client.dart';
 import 'data/network/todos_api/services/todo_service.dart';
-import 'data/repositories/todo_repository_impl.dart';
-import 'domain/repositories/todo_repository.dart';
+import 'data/repositories/remote_todo_repository_impl.dart';
+import 'domain/repositories/remote_todo_repository.dart';
 import 'domain/use_cases/fetch_todos_use_case.dart';
 import 'presentation/todos_screen/todos_cubit.dart';
 import 'presentation/todos_screen/todos_page.dart';
@@ -31,9 +31,9 @@ class App extends StatelessWidget {
           create: (context) =>
               TodoService(apiClient: context.read<ApiClient>()),
         ),
-        Provider<TodoRepository>(
-          create: (context) =>
-              TodoRepositoryImpl(todoService: context.read<TodoService>()),
+        Provider<RemoteTodoRepository>(
+          create: (context) => RemoteTodoRepositoryImpl(
+              todoRemoteService: context.read<TodoService>()),
         ),
         Provider<TodoLocalDataSource>(
           create: (context) => TodoLocalDataSourceImpl(),
@@ -44,12 +44,13 @@ class App extends StatelessWidget {
         ),
         Provider<FetchTodosUseCase>(
           create: (context) => FetchTodosUseCase(
-              todoRepository: context.read<TodoRepository>(),
-              persistenceRepository: context.read<PersistenceRepository>()),
+              remoteTodoRepository: context.read<RemoteTodoRepository>(),
+              localPersistenceRepository:
+                  context.read<PersistenceRepository>()),
         ),
         Provider<DeleteTodoUseCase>(
-          create: (context) =>
-              DeleteTodoUseCase(todoRepository: context.read<TodoRepository>()),
+          create: (context) => DeleteTodoUseCase(
+              todoRepository: context.read<RemoteTodoRepository>()),
         ),
         Provider<UpdateTodoUseCase>(
           create: (context) => UpdateTodoUseCase(

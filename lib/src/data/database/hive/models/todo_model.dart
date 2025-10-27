@@ -5,7 +5,6 @@ part 'todo_model.g.dart';
 
 @HiveType(typeId: 0)
 class TodoModel extends HiveObject {
-
   @HiveField(0)
   int localId;
 
@@ -103,5 +102,13 @@ class TodoModel extends HiveObject {
       createdAt: createdAt,
       updatedAt: updatedAt,
     );
+  }
+
+  static List<Todo> toEntityList(List<TodoModel> models) {
+    return models.map((model) => model.toEntity()).toList();
+  }
+
+  static List<TodoModel> fromEntityList(List<Todo> entities) {
+    return entities.map((entity) => TodoModel.fromEntity(entity)).toList();
   }
 }

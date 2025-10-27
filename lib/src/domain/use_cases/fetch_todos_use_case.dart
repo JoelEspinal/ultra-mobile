@@ -4,18 +4,19 @@ import '../repositories/persistence_repository.dart';
 
 import '../entities/todo.dart' as todo_entity;
 import '../failures/failure.dart';
-import '../repositories/todo_repository.dart';
+import '../repositories/remote_todo_repository.dart';
 
 class FetchTodosUseCase {
-  final TodoRepository todoRepository;
-  final PersistenceRepository persistenceRepository;
+  final RemoteTodoRepository remoteTodoRepository;
+  final PersistenceRepository localPersistenceRepository;
 
   FetchTodosUseCase(
-      {required this.persistenceRepository, required this.todoRepository});
+      {required this.localPersistenceRepository,
+      required this.remoteTodoRepository});
 
   Future<Either<Failure, List<todo_entity.Todo>>> execute() async {
     // Try to get todos from local persistence first
-    final localTodoModels = await persistenceRepository.getAllTodoModels();
+    final localTodoModels = await localPersistenceRepository.getAllTodoModels();
 
     if (localTodoModels.isNotEmpty) {
       final localEntities =
@@ -24,22 +25,18 @@ class FetchTodosUseCase {
     }
 
     // Fallback to remote repository when no local todos
-    final remoteTodosResult = await todoRepository.getTodos();
-    return await remoteTodosResult.fold(
-      (l) async => Left(l),
-      (r) async {
-        final todoModelList =
-            r.map((todo) => TodoModel.fromEntity(todo)).toList();
+    final remoteTodosResult = await remoteTodoRepository.getAll();
 
-        final todoIds =
-            await persistenceRepository.saveTodoModelList(todoModelList);
+    if (remoteTodosResult.isNotEmpty) {
+      final entityList =
+          remoteTodosResult.map((t) => TodoModel.fromEntity(t)).toList();
 
-        if (todoIds.isEmpty) {
-          return Left(ServerFailure('Failed to save todos locally'));
-        }
+      final todoIds =
+          await localPersistenceRepository.saveTodoModelList(entityList);
 
-        final allTodoModels = await persistenceRepository.getAllTodoModels();
-
+      if (todoIds.isNotEmpty) {
+        final allTodoModels =
+            await localPersistenceRepository.getAllTodoModels();
         if (allTodoModels.isNotEmpty) {
           final allTodoModelsEntities =
               allTodoModels.map((model) => model.toEntity()).toList();
@@ -47,7 +44,10 @@ class FetchTodosUseCase {
         } else {
           return Left(ServerFailure('Failed to save todos locally'));
         }
-      },
-    );
+      } else {
+        return Left(ServerFailure('Failed to save todos locally'));
+      }
+    }
+    return Left(ServerFailure('No todos found'));
   }
 }
