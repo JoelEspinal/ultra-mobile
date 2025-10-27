@@ -61,6 +61,12 @@ class TodoDetailPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop(true);
+          },
+          icon: Icon(Icons.arrow_back_rounded),
+        ),
         title: const Text('Todo Details'),
         actions: [
           BlocBuilder<TodoDetailCubit, TodoDetailState>(
@@ -89,10 +95,9 @@ class TodoDetailPage extends StatelessWidget {
             onPressed: () async {
               await context.read<TodoDetailCubit>().saveTodo();
               // Navigator.of(context).pop(true);
-
-              // ScaffoldMessenger.of(context).showSnackBar(
-              //   const SnackBar(content: Text('Saving changes...')),
-              // );
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Saving changes...')),
+              );
             },
           ),
         ],

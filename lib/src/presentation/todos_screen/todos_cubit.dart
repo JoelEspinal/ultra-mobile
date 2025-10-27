@@ -15,7 +15,14 @@ class TodosCubit extends Cubit<TodosState> {
 
   // 2. Event Handler: This method is called by the UI (the View).
   Future<void> loadTodos([String? filter]) async {
-    if (state.status == TodoStatus.loading) return;
+    emit(
+      state.copyWith(
+        status: TodoStatus.initial,
+        errorMessage: '',
+      ),
+    );
+
+    // if (state.status == TodoStatus.loading) return;
 
     // Emit the Loading state to update the UI
     emit(state.copyWith(status: TodoStatus.loading));

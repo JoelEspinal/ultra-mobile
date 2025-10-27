@@ -8,6 +8,10 @@ import 'src/data/database/hive/data_source/todo_local_data_source.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
+  print("----------------------");
+  print(appDocumentDir.path);
+  print("----------------------");
+
   await Hive.initFlutter(appDocumentDir.path);
   await TodoLocalDataSourceImpl.initHive();
 

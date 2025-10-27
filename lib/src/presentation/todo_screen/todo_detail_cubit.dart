@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 import '../../domain/entities/todo.dart';
 import '../../domain/failures/failure.dart';
@@ -12,13 +13,15 @@ import 'todo_detail_status.dart';
 class TodoDetailCubit extends Cubit<TodoDetailState> {
   // final FetchTodoDetailUseCase _fetchTodoDetailUseCase;
 
-  late UpdateTodoUseCase _updateTodoUseCase;
+  UpdateTodoUseCase updateTodoUseCase;
   final ImagePicker _imagePicker = ImagePicker();
 
   late TodoDetail todoDetail;
 
-  TodoDetailCubit() : super(const TodoDetailState());
+  TodoDetailCubit({required this.updateTodoUseCase})
+      : super(const TodoDetailState());
 
+//
   // Load todo detail
   Future<void> loadTodoDetail(Todo todo) async {
     if (state.status == TodoDetailStatus.loading) return;
@@ -172,14 +175,25 @@ class TodoDetailCubit extends Cubit<TodoDetailState> {
     emit(state.copyWith(status: TodoDetailStatus.updating));
     var currentDetail = state.todoDetail!;
 
+    var nowFormatted = DateFormat('MMM dd, yyyy').format(DateTime.now());
+
     final detailToTodo = Todo(
       id: currentDetail.id,
       todo: currentDetail.todo,
       completed: currentDetail.completed,
       userId: currentDetail.userId,
+      category: currentDetail.category,
+      description: currentDetail.description,
+      dueDate: currentDetail.dueDate,
+      imagePath: currentDetail.imagePath,
+      imageUrl: currentDetail.imagePath, // TODO verify property
+      isFavorite: currentDetail.isFavorite,
+      priority: currentDetail.priority.index,
+      reminderTime: currentDetail.reminderTime,
+      updatedAt: nowFormatted,
     );
 
-    final result = await _updateTodoUseCase.execute(detailToTodo);
+    final result = await updateTodoUseCase.execute(detailToTodo);
 
     result.fold(
       (failure) {
@@ -200,15 +214,11 @@ class TodoDetailCubit extends Cubit<TodoDetailState> {
         );
       },
       (updatedTodo) {
+        var a = TodoDetail.fromTodo(detailToTodo);
         emit(
           state.copyWith(
             status: TodoDetailStatus.success,
-            todoDetail: TodoDetail(
-              id: updatedTodo!.id,
-              todo: updatedTodo.todo,
-              completed: updatedTodo.completed,
-              userId: updatedTodo.userId,
-            ),
+            todoDetail: a,
             errorMessage: '',
           ),
         );

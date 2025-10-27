@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ultra_mobile/src/domain/entities/todo.dart';
 
 import '../widgets/show_bottom_confirmation_sheet.dart';
 import 'todos_cubit.dart';
@@ -10,8 +11,7 @@ class TodosPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final todosCubit = context.read<TodosCubit>();
-    todosCubit.loadTodos();
+    context.read<TodosCubit>().loadTodos();
 
     return SafeArea(
       child: Scaffold(
@@ -19,31 +19,40 @@ class TodosPage extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 100.0),
-              child: RefreshIndicator(
-                onRefresh: () => todosCubit.loadTodos(),
-                child: Center(
-                  child: BlocBuilder<TodosCubit, TodosState>(
-                    builder: (context, state) {
-                      if (state.status == TodoStatus.loading) {
-                        return const CircularProgressIndicator();
-                      } else if (state.status == TodoStatus.failure) {
-                        return Text(state.errorMessage);
-                      } else if (state.status == TodoStatus.success) {
-                        return ListView.builder(
+              // child: RefreshIndicator(
+              // onRefresh: () async => context.read<TodosCubit>().loadTodos(),
+              child: Center(
+                child: BlocBuilder<TodosCubit, TodosState>(
+                  builder: (context, state) {
+                    if (state.status == TodoStatus.initial) {
+                      return CircularProgressIndicator();
+                    }
+                    if (state.status == TodoStatus.loading) {
+                      return const CircularProgressIndicator();
+                    } else if (state.status == TodoStatus.failure) {
+                      return Text(state.errorMessage);
+                    } else if (state.status == TodoStatus.success) {
+                      return RefreshIndicator(
+                        onRefresh: () async =>
+                            context.read<TodosCubit>().loadTodos(),
+                        child: ListView.builder(
                           itemCount: state.todos.length,
                           itemBuilder: (context, index) {
-                            final todo = state.todos[index];
+                            // final todo = state.todos[index];
                             return Dismissible(
-                              key: Key(todo.id.toString()),
+                              key: Key(state.todos[index].id.toString()),
                               background: Container(color: Colors.red),
                               confirmDismiss: (direction) async {
                                 showBottomConfirmationSheet(
                                   context,
-                                  onConfirm: () {
-                                    todosCubit.deleteTodo(todo.id);
+                                  onConfirm: () async {
+                                    context
+                                        .read<TodosCubit>()
+                                        .deleteTodo(state.todos[index].id);
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        content: Text('Deleted "${todo.todo}"'),
+                                        content: Text(
+                                            'Deleted "${state.todos[index].todo}"'),
                                       ),
                                     );
                                   },
@@ -53,16 +62,13 @@ class TodosPage extends StatelessWidget {
                               child: SizedBox(
                                 height: 100.0,
                                 child: ListTile(
-                                  onTap: () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      '/todoDetail',
-                                      arguments: todo,
-                                    );
+                                  onTap: () async {
+                                    await _goToTodoDetail(
+                                        context, state.todos[index]);
                                   },
                                   title: Text(
-                                    todo.todo,
-                                    style: todo.completed
+                                    state.todos[index].todo,
+                                    style: state.todos[index].completed
                                         ? TextStyle(
                                             fontWeight: FontWeight.bold,
                                             decoration:
@@ -73,10 +79,12 @@ class TodosPage extends StatelessWidget {
                                         : null,
                                   ),
                                   leading: IconButton(
-                                    onPressed: () =>
-                                        todosCubit.toggleTodoStatus(todo.id),
+                                    onPressed: () => context
+                                        .read<TodosCubit>()
+                                        .toggleTodoStatus(
+                                            state.todos[index].id),
                                     icon: Icon(
-                                      todo.completed
+                                      state.todos[index].completed
                                           ? Icons.check_box
                                           : Icons.check_box_outline_blank,
                                     ),
@@ -84,12 +92,13 @@ class TodosPage extends StatelessWidget {
                                   trailing: IconButton(
                                     onPressed: () {
                                       context.read<TodosCubit>().toggleFavorite(
-                                            todo.id,
+                                            state.todos[index].id,
                                           );
                                     },
                                     icon: Icon(
-                                      (todo.isFavorite != null &&
-                                              todo.isFavorite == true)
+                                      (state.todos[index].isFavorite != null &&
+                                              state.todos[index].isFavorite ==
+                                                  true)
                                           ? Icons.star
                                           : Icons.star_border,
                                       color: Colors.amberAccent,
@@ -99,12 +108,12 @@ class TodosPage extends StatelessWidget {
                               ),
                             );
                           },
-                        );
-                      } else {
-                        return const Text('Press the button to load todos.');
-                      }
-                    },
-                  ),
+                        ),
+                      );
+                    } else {
+                      return const Text('Press the button to load todos.');
+                    }
+                  },
                 ),
               ),
             ),
@@ -126,7 +135,8 @@ class TodosPage extends StatelessWidget {
                   ],
                 ),
                 child: TextField(
-                  onChanged: (value) => todosCubit.loadTodos(value),
+                  onChanged: (value) async =>
+                      await context.read<TodosCubit>().loadTodos(value),
                   decoration: InputDecoration(
                     hintText: " Search todo ...",
                     border: InputBorder.none,
@@ -142,5 +152,17 @@ class TodosPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _goToTodoDetail(BuildContext context, Todo todo) async {
+    final result = await Navigator.pushNamed(
+      context,
+      '/todoDetail',
+      arguments: todo,
+    );
+
+    if (result == true) {
+      await context.read<TodosCubit>().loadTodos();
+    }
   }
 }

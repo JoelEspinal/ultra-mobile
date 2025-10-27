@@ -1,16 +1,18 @@
 import 'package:hive/hive.dart';
-import '../../../../domain/entities/todo.dart';
+
 import '../models/todo_model.dart';
+
 // 1. IMPORT THE GENERATED ADAPTER FILE
 
 // import '../models/todo_model.g.dart';
 
 // Define the contract (interface) for the local data source
 abstract class TodoLocalDataSource {
-  Future<void> addTodo(Todo todo);
-  Todo? getTodo(int todoId);
-  Future<List<Todo>> getTodos();
-  Future<void> updateTodo(Todo todo);
+  Future<void> addTodo(TodoModel todo);
+  Future<List<int>> addAll(List<TodoModel> todos);
+  // Todo? getTodo(int todoId);
+  Future<List<TodoModel>> getTodos();
+  Future<void> updateTodo(TodoModel todo);
   Future<void> deleteTodo(int id);
 }
 
@@ -32,36 +34,41 @@ class TodoLocalDataSourceImpl implements TodoLocalDataSource {
 
   Box<TodoModel> get _todoBox => Hive.box<TodoModel>(_todoBoxName);
 
-  @override
-  Todo? getTodo(int todoId) {
-    // TodoModel? todoModel = _todoBox.get(todoId);
-    final iterableTodo =
-        _todoBox.values.where((element) => element.id == todoId);
-    final todo = iterableTodo.firstOrNull;
-    if (todo != null) {
-      final todoEntity = todo.toEntity();
-      return todoEntity;
-    }
-
-    return null;
-
-    // if(todo != null) {
-    //     final resultTodo =
-    // }
-    // if (todoModel == null) return null;
-    // var result = todoModel.toEntity();
-    // return result;
+  Future<List<int>> addAll(List<TodoModel> todos) async {
+    var keys = await _todoBox.addAll(todos);
+    var keyList = keys.toList();
+    return keyList;
   }
 
+  // @override
+  // Todo? getTodo(int todoId) {
+  //   // TodoModel? todoModel = _todoBox.get(todoId);
+  //   final iterableTodo =
+  //       _todoBox.values.where((element) => element.id == todoId);
+  //   final todo = iterableTodo.firstOrNull;
+  //   if (todo != null) {
+  //     final todoEntity = todo.toEntity();
+  //     return todoEntity;
+  //   }
+
+  //   return null;
+
+  // if(todo != null) {
+  //     final resultTodo =
+  // }
+  // if (todoModel == null) return null;
+  // var result = todoModel.toEntity();
+  // return result;
+  // }
+
   @override
-  Future<void> addTodo(Todo todo) async {
-    TodoModel todoModel = TodoModel.fromEntity(todo);
+  Future<void> addTodo(TodoModel todo) async {
+    TodoModel todoModel = todo;
 
     // Hive uses the model's type ID (0 in this case) and saves it
     // await _todoBox.put(todoModel.id, todoModel);
 
     final id = await _todoBox.add(todoModel);
-
     /**
      * After save a new TodoModel
      * 1. Get record from database
@@ -71,7 +78,9 @@ class TodoLocalDataSourceImpl implements TodoLocalDataSource {
     final iterableTodo = _todoBox.values.where((model) => model.id == todo.id);
     final localTodo = iterableTodo.firstOrNull;
 
-    if (localTodo != null && id == 0) {
+    if (localTodo != null) {
+      // && id == 0) {
+      // if(id == 0) {
       todoModel.id = todo.id;
       todoModel.localId = todo.id;
 
@@ -82,20 +91,20 @@ class TodoLocalDataSourceImpl implements TodoLocalDataSource {
   }
 
   @override
-  Future<List<Todo>> getTodos() async {
+  Future<List<TodoModel>> getTodos() async {
     // Get all TodoModels, map them back to domain Entities
     if (_todoBox.values.isNotEmpty) {
-      final todoList =
-          _todoBox.values.map((model) => model.toEntity()).toList();
-      return todoList;
+      final todoModels =
+          _todoBox.values; //.map((model) => model.toEntity()).toList();
+      return todoModels.toList();
     } else {
       return Future.value([]);
     }
   }
 
   @override
-  Future<void> updateTodo(Todo todo) async {
-    final todoModel = TodoModel.fromEntity(todo);
+  Future<void> updateTodo(TodoModel todo) async {
+    // final todoModel = TodoModel.fromEntity(todo);
     // Use put with the key (ID) to overwrite the existing record
     final iterableTodo = _todoBox.values.where((model) => model.id == todo.id);
     var localTodo = iterableTodo.firstOrNull;
@@ -107,14 +116,10 @@ class TodoLocalDataSourceImpl implements TodoLocalDataSource {
       // var localId = localTodo.localId;
 
       localTodo.todo = todo.todo;
-      // await localTodo.save();
-
       await localTodo.save();
 
       // await _todoBox.put(localTodo.key, localTodo);
-
       // await localTodo.save();
-
       // await todoModel.save();
       // await _todoBox.put(localId, todoModel);
 
