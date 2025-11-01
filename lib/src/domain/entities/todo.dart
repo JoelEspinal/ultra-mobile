@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'todo.freezed.dart';
 
-// part 'todo.g.dart';
+part 'todo.g.dart';
 
 @freezed
 abstract class Todo with _$Todo {

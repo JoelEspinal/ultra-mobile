@@ -1,10 +1,11 @@
 import 'package:hive/hive.dart';
-import '../../../../domain/entities/todo.dart'; // Import the Domain Entity
+import '../../../../domain/entities/todo.dart'
+    as todo_entity; // Import the Domain Entity
 
 part 'todo_model.g.dart';
 
 @HiveType(typeId: 0)
-class TodoModel extends HiveObject {
+class Todo extends HiveObject {
   @HiveField(0)
   int localId;
 
@@ -49,7 +50,7 @@ class TodoModel extends HiveObject {
 
   // 2. Define a standard constructor for the model.
   // NOTE: 'required' is removed, so default values must be provided for non-nullable final fields.
-  TodoModel({
+  Todo({
     this.localId = 0,
     this.id = 0,
     this.todo = '',
@@ -66,28 +67,9 @@ class TodoModel extends HiveObject {
     this.updatedAt,
   });
 
-  // 3. Factory method to convert Domain Entity to Data Model
-  factory TodoModel.fromEntity(Todo entity) {
-    return TodoModel(
-      id: entity.id,
-      todo: entity.todo,
-      completed: entity.completed,
-      userId: entity.userId,
-      description: entity.description,
-      dueDate: entity.dueDate,
-      priority: entity.priority,
-      category: entity.category,
-      imagePath: entity.imagePath,
-      reminderTime: entity.reminderTime,
-      isFavorite: entity.isFavorite,
-      createdAt: entity.createdAt,
-      updatedAt: entity.updatedAt,
-    );
-  }
-
   // 4. Method to convert Data Model back to Domain Entity
-  Todo toEntity() {
-    return Todo(
+  todo_entity.Todo toEntity() {
+    return todo_entity.Todo(
       id: id,
       todo: todo,
       completed: completed,
@@ -104,11 +86,28 @@ class TodoModel extends HiveObject {
     );
   }
 
-  static List<Todo> toEntityList(List<TodoModel> models) {
+  static List<todo_entity.Todo> toEntityList(List<Todo> models) {
     return models.map((model) => model.toEntity()).toList();
   }
 
-  static List<TodoModel> fromEntityList(List<Todo> entities) {
-    return entities.map((entity) => TodoModel.fromEntity(entity)).toList();
+  static List<Todo> toTodoModelList(List<todo_entity.Todo> entities) {
+    return entities.map((entry) => Todo.fromTodoEntity(entry)).toList();
+  }
+
+  factory Todo.fromTodoEntity(todo_entity.Todo todo) {
+    return Todo(
+        id: todo.id,
+        todo: todo.todo,
+        completed: todo.completed,
+        userId: todo.userId,
+        description: todo.description,
+        dueDate: todo.dueDate,
+        priority: todo.priority,
+        category: todo.category,
+        imagePath: todo.imagePath,
+        reminderTime: todo.reminderTime,
+        isFavorite: todo.isFavorite,
+        createdAt: todo.createdAt,
+        updatedAt: todo.updatedAt);
   }
 }

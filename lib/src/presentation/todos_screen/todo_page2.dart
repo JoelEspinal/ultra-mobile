@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ultra_mobile/src/domain/entities/todo.dart';
 
-import '../../domain/entities/todo.dart';
 import '../widgets/show_bottom_confirmation_sheet.dart';
 import 'todos_cubit.dart';
 import 'todos_state.dart';
@@ -11,8 +11,6 @@ class TodosPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<TodosCubit>().loadTodos();
-
     return SafeArea(
       child: Scaffold(
         body: Stack(
@@ -34,13 +32,13 @@ class TodosPage extends StatelessWidget {
                     } else if (state.status == TodoStatus.success) {
                       return RefreshIndicator(
                         onRefresh: () async =>
-                            await context.read<TodosCubit>().loadTodos(),
+                            context.read<TodosCubit>().loadTodos(),
                         child: ListView.builder(
                           itemCount: state.todos.length,
                           itemBuilder: (context, index) {
-                            final todo = state.todos[index];
+                            // final todo = state.todos[index];
                             return Dismissible(
-                              key: Key(todo.id.toString()),
+                              key: Key(state.todos[index].id.toString()),
                               background: Container(color: Colors.red),
                               confirmDismiss: (direction) async {
                                 showBottomConfirmationSheet(

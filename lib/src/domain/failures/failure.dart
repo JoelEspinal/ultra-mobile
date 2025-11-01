@@ -40,3 +40,15 @@ class InvalidDataFailure extends Failure {
 class ValidationFailure extends Failure {
   const ValidationFailure() : super("Todo title cannot be empty.");
 }
+
+class UnexpectedFailure extends Failure {
+  const UnexpectedFailure(String message)
+      : super('An unexpected error occurred: $message');
+}
+
+// ----------   Local Failiures   ---------------
+
+
+class UnableSyncFailire extends Failure {
+  const UnableSyncFailire() : super("Todo title cannot be empty.");
+}

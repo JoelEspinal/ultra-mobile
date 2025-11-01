@@ -1,16 +1,18 @@
 import 'package:bloc/bloc.dart';
 
-import '../../domain/use_cases/fetch_todos_use_case.dart';
-import '../../domain/use_cases/delete_todo_use_case.dart';
+import '../../domain/entities/todo.dart' as todo_entity;
+import '../../data/database/hive/models/todo_model.dart' as todo_model;
 import '../../domain/failures/failure.dart';
-
+import '../../domain/use_cases/local_use_cases/delete_todo_use_case.dart';
+import '../../domain/use_cases/local_use_cases/fetch_todo_list_from_hive_use_case.dart';
 import 'todos_state.dart';
 
 class TodosCubit extends Cubit<TodosState> {
-  final FetchTodosUseCase _fetchTodosUseCase;
-  final DeleteTodoUseCase _deleteTodoUseCase;
+  final FetchLocalTodoUseCase fetchLocalTodoUseCase;
+  final DeleteTodoUseCase deleteTodoUseCase;
 
-  TodosCubit(this._fetchTodosUseCase, this._deleteTodoUseCase)
+  TodosCubit(
+      {required this.fetchLocalTodoUseCase, required this.deleteTodoUseCase})
       : super(const TodosState());
 
   // 2. Event Handler: This method is called by the UI (the View).
@@ -28,10 +30,10 @@ class TodosCubit extends Cubit<TodosState> {
     emit(state.copyWith(status: TodoStatus.loading));
 
     // 3. Call Business Logic: Execute the Use Case
-    final result = await _fetchTodosUseCase.execute();
+    final todoList = await fetchLocalTodoUseCase.execute();
 
     // 4. Process Result: Use the 'fold' method from dartz (Either)
-    result.fold(
+    todoList.fold(
       // Left side: Failure
       (failure) {
         // Map the abstract Domain Failure into a Presentation error message
@@ -52,19 +54,39 @@ class TodosCubit extends Cubit<TodosState> {
           ),
         );
       },
-      (todos) {
+
+      (resultTodos) {
+        // final resultList = resultTodos
+        //     .map((model) => todo_entity.Todo(
+        //         id: model.id,
+        //         todo: model.todo,
+        //         completed: model.completed,
+        //         userId: model.userId))
+        //     .toList();
+        // final resultList = todo_model.Todo.toEntityList(resultTodos.cast());
+
+
         emit(
           state.copyWith(
             status: TodoStatus.success,
-            todos: (filter != null && filter.isNotEmpty)
-                ? todos
-                    .where(
-                      (todo) => todo.todo.toLowerCase().contains(
-                            filter.toLowerCase(),
-                          ),
-                    )
-                    .toList()
-                : todos,
+            todos: resultTodos,
+            //resultTodos.map((todoModel) => todoModel.toEntity()).toList()
+            // as List<todo_entity.Todo>?,
+
+            // List<Todo>.from(
+            //   resultTodos,
+            // ),
+
+            // (filter != null && filter.isNotEmpty)
+            //     ? todos
+            //         .where(
+            //           (todo) => todo.todo.toLowerCase().contains(
+            //                 filter.toLowerCase(),
+            //               ),
+            //         )
+            //         .toList()
+
+            // : todos,
             errorMessage: '',
           ),
         );
@@ -95,7 +117,7 @@ class TodosCubit extends Cubit<TodosState> {
 
     emit(state.copyWith(status: TodoStatus.loading));
 
-    final result = await _deleteTodoUseCase.execute(todoId);
+    final result = await deleteTodoUseCase.execute(todoId);
 
     result.fold(
       (failure) {

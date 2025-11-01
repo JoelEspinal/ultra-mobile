@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../../domain/entities/todo.dart';
 import '../../domain/failures/failure.dart';
-import '../../domain/use_cases/update_todo_use_case.dart';
+import '../../domain/use_cases/local_use_cases/update_todo_use_case.dart';
 import 'todo_detail_status.dart';
 
 // import '../../domain/use_cases/update_todo_use_case.dart';
@@ -177,7 +177,7 @@ class TodoDetailCubit extends Cubit<TodoDetailState> {
 
     var nowFormatted = DateFormat('MMM dd, yyyy').format(DateTime.now());
 
-    final detailToTodo = Todo(
+    final detailTodo = Todo(
       id: currentDetail.id,
       todo: currentDetail.todo,
       completed: currentDetail.completed,
@@ -193,7 +193,9 @@ class TodoDetailCubit extends Cubit<TodoDetailState> {
       updatedAt: nowFormatted,
     );
 
-    final result = await updateTodoUseCase.execute(detailToTodo);
+    var a = TodoDetail.fromTodo(detailTodo);
+
+    final result = await updateTodoUseCase.execute(detailTodo);
 
     result.fold(
       (failure) {
@@ -214,7 +216,7 @@ class TodoDetailCubit extends Cubit<TodoDetailState> {
         );
       },
       (updatedTodo) {
-        var a = TodoDetail.fromTodo(detailToTodo);
+        var a = TodoDetail.fromTodo(detailTodo);
         emit(
           state.copyWith(
             status: TodoDetailStatus.success,

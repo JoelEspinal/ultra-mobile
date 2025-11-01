@@ -3,10 +3,10 @@ import '../constant.dart';
 import '../models/todo.dart';
 import '../models/todo_response.dart';
 
-class TodoService {
+class RemoteTodoService {
   final ApiClient apiClient;
 
-  TodoService({required this.apiClient});
+  RemoteTodoService({required this.apiClient});
 
   Future<Todo> fetchTodo(int id) async {
     final request = "${Constant.todosEndpoint}/$id";

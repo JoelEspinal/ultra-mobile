@@ -2,43 +2,47 @@ import 'package:hive/hive.dart';
 
 import '../models/todo_model.dart';
 
-// 1. IMPORT THE GENERATED ADAPTER FILE
-
-// import '../models/todo_model.g.dart';
-
 // Define the contract (interface) for the local data source
 abstract class TodoLocalDataSource {
-  Future<void> addTodo(TodoModel todo);
-  Future<List<int>> addAll(List<TodoModel> todos);
+  Future<void> addTodo(Todo todo);
+  Future<List<int>> addAll(List<Todo> todos);
   // Todo? getTodo(int todoId);
-  Future<List<TodoModel>> getTodos();
-  Future<void> updateTodo(TodoModel todo);
+
+  Future<List<Todo>> getAllTodos();
+  Future<void> updateTodo(Todo todo);
   Future<void> deleteTodo(int id);
+  bool isBoxEmpty();
 }
 
 // Concrete Hive implementation
 class TodoLocalDataSourceImpl implements TodoLocalDataSource {
+  static late Box<Todo> _box;
   static const String _todoBoxName = 'todos';
 
-  // Initialize and register adapters (must be called once at startup)
-  static Future<void> initHive() async {
-    // Hive initialization usually happens in main()
-    // await Hive.initFlutter();
-    // This registration now works because todo_model.g.dart is imported.
-
-    //TODO Separete registration adapters
-    Hive.registerAdapter(TodoModelAdapter());
-
-    await Hive.openBox<TodoModel>(_todoBoxName);
+  static Future<void> init() async {
+    // Check if the box is already open to prevent errors/warnings
+    if (!Hive.isBoxOpen(_todoBoxName)) {
+      _box = await Hive.openBox<Todo>(_todoBoxName);
+    } else {
+      _box = Hive.box<Todo>(_todoBoxName);
+    }
   }
 
-  Box<TodoModel> get _todoBox => Hive.box<TodoModel>(_todoBoxName);
+  Box<Todo> get todoBox {
+    return _box;
+  }
 
-  Future<List<int>> addAll(List<TodoModel> todos) async {
-    var keys = await _todoBox.addAll(todos);
+  @override
+  Future<List<int>> addAll(List<Todo> todos) async {
+    var keys = await todoBox.addAll(todos);
     var keyList = keys.toList();
     return keyList;
   }
+
+  // Future<List<Todo>> getAllTodos() {
+  //   final todoList = todoBox.values.toList();
+  //   return Future.value(todoList);
+  // }
 
   // @override
   // Todo? getTodo(int todoId) {
@@ -62,20 +66,20 @@ class TodoLocalDataSourceImpl implements TodoLocalDataSource {
   // }
 
   @override
-  Future<void> addTodo(TodoModel todo) async {
-    TodoModel todoModel = todo;
+  Future<void> addTodo(Todo todo) async {
+    Todo todoModel = todo;
 
     // Hive uses the model's type ID (0 in this case) and saves it
     // await _todoBox.put(todoModel.id, todoModel);
 
-    final id = await _todoBox.add(todoModel);
+    final id = await todoBox.add(todoModel);
     /**
      * After save a new TodoModel
      * 1. Get record from database
      * 2. Update TodoModel.id if localTodo id is equal cero
      * 3. Save todoModel with updated id
      */
-    final iterableTodo = _todoBox.values.where((model) => model.id == todo.id);
+    final iterableTodo = todoBox.values.where((model) => model.id == todo.id);
     final localTodo = iterableTodo.firstOrNull;
 
     if (localTodo != null) {
@@ -91,25 +95,34 @@ class TodoLocalDataSourceImpl implements TodoLocalDataSource {
   }
 
   @override
-  Future<List<TodoModel>> getTodos() async {
-    // Get all TodoModels, map them back to domain Entities
-    if (_todoBox.values.isNotEmpty) {
-      final todoModels =
-          _todoBox.values; //.map((model) => model.toEntity()).toList();
-      return todoModels.toList();
-    } else {
-      return Future.value([]);
+  Future<List<Todo>> getAllTodos() async {
+    try {
+      List<Todo> todos = [];
+
+      final modelKeys = todoBox.keys.toList();
+      for (var key in modelKeys) {
+        final todo = await todoBox.get(key);
+        if (todo != null) {
+          todos.add(todo);
+        }
+      }
+
+      // await todoBox.close();
+      return todos;
+    } catch (e) {
+      print('Error: Box contains wrong data type for Todo: $e');
+      return [];
     }
   }
 
   @override
-  Future<void> updateTodo(TodoModel todo) async {
+  Future<void> updateTodo(Todo todo) async {
     // final todoModel = TodoModel.fromEntity(todo);
     // Use put with the key (ID) to overwrite the existing record
-    final iterableTodo = _todoBox.values.where((model) => model.id == todo.id);
+    final iterableTodo = todoBox.values.where((model) => model.id == todo.id);
     var localTodo = iterableTodo.firstOrNull;
 
-    var boxValues = _todoBox.values.toList();
+    var boxValues = todoBox.values.toList();
 
     if (localTodo != null) {
       // todoModel.id = todo.id;
@@ -123,11 +136,11 @@ class TodoLocalDataSourceImpl implements TodoLocalDataSource {
       // await todoModel.save();
       // await _todoBox.put(localId, todoModel);
 
-      var boxValues2 = _todoBox.values.toList();
+      var boxValues2 = todoBox.values.toList();
 
       // await localTodo.save();
 
-      var boxValues3 = _todoBox.values.toList();
+      var boxValues3 = todoBox.values.toList();
 
       // await todoModel.save();
       // await _todoBox.put(todo.id, todoModel);
@@ -136,6 +149,11 @@ class TodoLocalDataSourceImpl implements TodoLocalDataSource {
 
   @override
   Future<void> deleteTodo(int id) async {
-    await _todoBox.delete(id);
+    await todoBox.delete(id);
+  }
+
+  @override
+  bool isBoxEmpty() {
+    return todoBox.values.toList().isEmpty;
   }
 }

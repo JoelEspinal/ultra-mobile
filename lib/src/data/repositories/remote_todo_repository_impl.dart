@@ -3,18 +3,18 @@ import 'dart:async';
 import '../network/todos_api/models/todo.dart' as todo_model;
 import '../../domain/entities/todo.dart';
 import '../network/error_handler.dart';
-import '../network/todos_api/services/todo_service.dart';
+import '../network/todos_api/services/remote_todo_service.dart';
 import '../../domain/repositories/remote_todo_repository.dart';
 
 class RemoteTodoRepositoryImpl implements RemoteTodoRepository {
-  final TodoService todoRemoteService;
+  final RemoteTodoService remoteTodoService;
 
-  RemoteTodoRepositoryImpl({required this.todoRemoteService});
+  RemoteTodoRepositoryImpl({required this.remoteTodoService});
 
   @override
   Future<Todo?> delete(int id) async {
     try {
-      final t = await todoRemoteService.deleteTodo(id);
+      final t = await remoteTodoService.deleteTodo(id);
       if (t == null) {
         return null;
       }
@@ -33,9 +33,9 @@ class RemoteTodoRepositoryImpl implements RemoteTodoRepository {
   }
 
   @override
-  Future<List<Todo>> getAll() async {
+  Future<List<Todo>> getTodoRemoteList() async {
     try {
-      final todosResponse = await todoRemoteService.fetchTodos();
+      final todosResponse = await remoteTodoService.fetchTodos();
 
       if (todosResponse.todos.isEmpty) {
         return Future.value([]);
@@ -61,7 +61,7 @@ class RemoteTodoRepositoryImpl implements RemoteTodoRepository {
   @override
   Future<Todo> getTodo(int id) async {
     try {
-      final remoteTodo = await todoRemoteService.fetchTodo(id);
+      final remoteTodo = await remoteTodoService.fetchTodo(id);
       final todo = Todo(
         id: remoteTodo.id,
         todo: remoteTodo.todo,
@@ -92,7 +92,7 @@ class RemoteTodoRepositoryImpl implements RemoteTodoRepository {
         userId: updateTodo.userId,
       );
 
-      final updatedTodo = await todoRemoteService.updateTodo(todoModel);
+      final updatedTodo = await remoteTodoService.updateTodo(todoModel);
 
       if (updatedTodo == null) return null;
 

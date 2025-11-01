@@ -6,21 +6,21 @@ part of 'todo_model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class TodoModelAdapter extends TypeAdapter<TodoModel> {
+class TodoModelAdapter extends TypeAdapter<Todo> {
   @override
   final typeId = 0;
 
   @override
-  TodoModel read(BinaryReader reader) {
+  Todo read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return TodoModel();
+    return Todo();
   }
 
   @override
-  void write(BinaryWriter writer, TodoModel obj) {
+  void write(BinaryWriter writer, Todo obj) {
     writer.writeByte(0);
   }
 
