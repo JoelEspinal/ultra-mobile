@@ -1,8 +1,8 @@
-import 'package:hive/hive.dart';
+import 'package:hive_ce_flutter/adapters.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
+
 import '../../../../domain/entities/todo.dart'
     as todo_entity; // Import the Domain Entity
-
-part 'todo_model.g.dart';
 
 @HiveType(typeId: 0)
 class Todo extends HiveObject {

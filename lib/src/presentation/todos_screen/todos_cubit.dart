@@ -65,7 +65,6 @@ class TodosCubit extends Cubit<TodosState> {
         //     .toList();
         // final resultList = todo_model.Todo.toEntityList(resultTodos.cast());
 
-
         emit(
           state.copyWith(
             status: TodoStatus.success,
@@ -101,9 +100,7 @@ class TodosCubit extends Cubit<TodosState> {
     final updatedTodos = state.todos.map((todo) {
       return todo.id == todoId
           ? todo.copyWith(
-              isFavorite: todo.isFavorite != null && todo.isFavorite == true
-                  ? false
-                  : true,
+              isFavorite: () => !(todo.isFavorite ?? false),
             )
           : todo;
     }).toList();

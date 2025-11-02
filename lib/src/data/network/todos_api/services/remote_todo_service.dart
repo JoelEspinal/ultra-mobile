@@ -1,7 +1,8 @@
+import '../../error_handler.dart';
 import '../api_client.dart';
 import '../constant.dart';
-import '../models/todo.dart';
-import '../models/todo_response.dart';
+import '../data_source/todo.dart';
+import '../data_source/todo_response.dart';
 
 class RemoteTodoService {
   final ApiClient apiClient;
@@ -14,9 +15,19 @@ class RemoteTodoService {
     return Todo.fromJson(response.data);
   }
 
-  Future<TodosResponse> fetchTodos() async {
-    final response = await apiClient.dio.get(Constant.todosEndpoint);
-    return TodosResponse.fromJson(response.data);
+  Future<TodosResponse?> fetchTodos() async {
+    try {
+      final response = await apiClient.dio.get(Constant.todosEndpoint);
+      final data = response.data;
+      if (response.statusCode == 200) {
+        final todosResponse = TodosResponse.fromMap(data);
+        return Future.value(todosResponse);
+      }
+
+      return null;
+    } catch (e) {
+      throw mapExceptionToFailure(e);
+    }
   }
 
   Future<TodosResponse> paginateTodos({int limit = 20, int skip = 0}) async {

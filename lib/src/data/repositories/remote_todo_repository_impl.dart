@@ -1,6 +1,8 @@
 import 'dart:async';
 
-import '../network/todos_api/models/todo.dart' as todo_model;
+import 'package:ultra_mobile/src/data/network/todos_api/data_source/todo_response.dart';
+
+import '../network/todos_api/data_source/todo.dart' as todo_model;
 import '../../domain/entities/todo.dart';
 import '../network/error_handler.dart';
 import '../network/todos_api/services/remote_todo_service.dart';
@@ -35,9 +37,9 @@ class RemoteTodoRepositoryImpl implements RemoteTodoRepository {
   @override
   Future<List<Todo>> getTodoRemoteList() async {
     try {
-      final todosResponse = await remoteTodoService.fetchTodos();
+      TodosResponse? todosResponse = await remoteTodoService.fetchTodos();
 
-      if (todosResponse.todos.isEmpty) {
+      if (todosResponse == null) {
         return Future.value([]);
       }
 
@@ -52,7 +54,7 @@ class RemoteTodoRepositoryImpl implements RemoteTodoRepository {
           )
           .toList();
 
-      return todoEntities;
+      return Future.value(todoEntities);
     } catch (e) {
       throw mapExceptionToFailure(e);
     }
@@ -78,32 +80,12 @@ class RemoteTodoRepositoryImpl implements RemoteTodoRepository {
   @override
   Future<Todo?> updateTodo(Todo updateTodo) async {
     try {
-      // final todo = (t) => Todo(
-      //       id: t.id,
-      //       todo: t.todo,
-      //       completed: t.completed,
-      //       userId: t.userId,
-      //     );
-
-      final todoModel = todo_model.Todo(
-        id: updateTodo.id,
-        todo: updateTodo.todo,
-        completed: updateTodo.completed,
-        userId: updateTodo.userId,
-      );
-
+      final todoModel = todo_model.Todo.fromJson(updateTodo.toJson());
       final updatedTodo = await remoteTodoService.updateTodo(todoModel);
 
       if (updatedTodo == null) return null;
 
-      final todoEntity = updatedTodo.map(
-        (t) => Todo(
-          id: t.id,
-          todo: t.todo,
-          completed: t.completed,
-          userId: t.userId,
-        ),
-      );
+      final todoEntity = Todo.fromJson(updatedTodo.toJson());
 
       return todoEntity;
     } catch (e) {
