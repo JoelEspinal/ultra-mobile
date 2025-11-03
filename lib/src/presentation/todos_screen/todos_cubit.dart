@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 
-import '../../domain/failures/failure.dart';
+import '../../common/failures/failure.dart';
 import '../../domain/use_cases/local_use_cases/delete_todo_use_case.dart';
 import '../../domain/use_cases/local_use_cases/fetch_todo_list_from_hive_use_case.dart';
 import 'todos_state.dart';

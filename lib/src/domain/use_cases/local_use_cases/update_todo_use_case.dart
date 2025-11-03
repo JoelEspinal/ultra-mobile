@@ -3,7 +3,7 @@ import 'package:dartz/dartz.dart';
 import '../../../data/database/hive/models/todo.dart';
 import '../../entities/todo.dart' as todo_entity;
 import '../../repositories/local_todo_repository.dart';
-import '../../failures/failure.dart';
+import '../../../common/failures/failure.dart';
 
 class UpdateTodoUseCase {
   final LocalPersistenceRepository persistenceRepository;

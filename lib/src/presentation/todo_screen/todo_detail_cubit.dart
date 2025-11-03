@@ -1,10 +1,9 @@
 import 'package:bloc/bloc.dart';
-
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
+import '../../common/failures/failure.dart';
 import '../../domain/entities/todo.dart';
-import '../../domain/failures/failure.dart';
 import '../../domain/use_cases/local_use_cases/update_todo_use_case.dart';
 import 'todo_detail_status.dart';
 

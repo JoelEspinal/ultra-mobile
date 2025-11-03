@@ -30,8 +30,15 @@ class SplashScreen extends StatelessWidget {
         },
         child: const Scaffold(
           // Show a loading indicator while the sync is in progress
-          body: Center(
-            child: CircularProgressIndicator(),
+          body: Stack(
+            children: [
+              Center(
+                child: Icon(
+                  Icons.account_circle_outlined,
+                ),
+              ),
+              CircularProgressIndicator(),
+            ],
           ),
         ),
       ),

@@ -4,15 +4,10 @@ import '../../domain/repositories/local_todo_repository.dart';
 import '../database/hive/models/todo.dart';
 import './../database/hive/data_source/todo_local_data_source.dart';
 
-class PersistenceRepositoryImpl implements LocalPersistenceRepository {
+class LocalPersistenceRepositoryImpl implements LocalPersistenceRepository {
   final TodoLocalDataSource localDataSource;
 
-  PersistenceRepositoryImpl({required this.localDataSource});
-
-  @override
-  Future<void> saveAll(List<Todo> todoModelList) async {
-    await localDataSource.addAll(todoModelList);
-  }
+  LocalPersistenceRepositoryImpl({required this.localDataSource});
 
   @override
   Future<List<int>> addTodoModelList(List<Todo> todoModelList) async {
@@ -31,11 +26,6 @@ class PersistenceRepositoryImpl implements LocalPersistenceRepository {
   }
 
   @override
-  Future<void> saveTodo(Todo todo) async {
-    await localDataSource.addTodo(todo);
-  }
-
-  @override
   Future<bool> isBoxEmpty() async {
     return await localDataSource.isBoxEmpty();
   }
@@ -44,5 +34,25 @@ class PersistenceRepositoryImpl implements LocalPersistenceRepository {
   Future<List<Todo>> getAllTodoModels() async {
     final todoModelList = await localDataSource.getAllTodos();
     return Future.value(todoModelList);
+  }
+
+  @override
+  Future<List<int>> addAll(List<Todo> todos) {
+    return localDataSource.addAll(todos);
+  }
+
+  @override
+  Future<void> addTodo(Todo todo) {
+    return localDataSource.addTodo(todo);
+  }
+
+  @override
+  Future<List<Todo>> getAllTodos() {
+    return localDataSource.getAllTodos();
+  }
+
+  @override
+  Future<Todo?> getTodo(int todoId) {
+    return localDataSource.getTodo(todoId);
   }
 }

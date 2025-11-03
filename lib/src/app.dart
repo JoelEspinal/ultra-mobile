@@ -39,10 +39,10 @@ class App extends StatelessWidget {
               remoteTodoService: context.read<RemoteTodoService>()),
         ),
         Provider<TodoLocalDataSource>(
-          create: (context) => TodoLocalDataSourceImpl(),
+          create: (context) => TodoLocalDataSource(),
         ),
         Provider<LocalPersistenceRepository>(
-          create: (context) => PersistenceRepositoryImpl(
+          create: (context) => LocalPersistenceRepositoryImpl(
               localDataSource: context.read<TodoLocalDataSource>()),
         ),
         Provider<FetchLocalTodoUseCase>(

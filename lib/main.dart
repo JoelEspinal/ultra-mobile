@@ -18,6 +18,6 @@ void main() async {
   Hive
     ..registerAdapter(TodoAdapter())
     ..init(appDocumentsDir.path);
-  final todoBox = await Hive.openBox<Todo>(todoBoxName);
+  await Hive.openBox<Todo>(todoBoxName);
   runApp(const App());
 }

@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../data/database/hive/models/todo.dart';
-import '../../failures/failure.dart';
+import '../../../common/failures/failure.dart';
 import '../../repositories/local_todo_repository.dart';
 
 class SaveTodoListUseCase {
@@ -10,7 +10,7 @@ class SaveTodoListUseCase {
   SaveTodoListUseCase({required this.localPersistenceRepository});
 
   Future<Either<Failure, Unit>> execute(List<Todo> todoModelList) async {
-    await localPersistenceRepository.saveAll(todoModelList);
+    await localPersistenceRepository.addAll(todoModelList);
     return Future.value(Right(unit));
   }
 }

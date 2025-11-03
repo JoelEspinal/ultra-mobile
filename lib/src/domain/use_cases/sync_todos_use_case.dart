@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import '../../data/database/hive/models/todo.dart' as todo_model;
 
-import '../failures/failure.dart';
+import '../../common/failures/failure.dart';
 import '../repositories/local_todo_repository.dart';
 import '../repositories/remote_todo_repository.dart';
 

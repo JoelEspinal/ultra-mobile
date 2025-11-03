@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'dart:io';
 
-import '../../domain/failures/failure.dart';
+import 'failures/failure.dart';
 
 // Function to map a technical Exception/Error into a Domain Failure
 Failure mapExceptionToFailure(Object e) {

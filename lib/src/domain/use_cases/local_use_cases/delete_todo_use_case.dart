@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../entities/todo.dart';
-import '../../failures/failure.dart';
+import '../../../common/failures/failure.dart';
 import '../../repositories/local_todo_repository.dart'
     show LocalPersistenceRepository;
 

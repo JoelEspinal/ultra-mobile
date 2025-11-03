@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 
-import './../../../../domain/entities/todo.dart' as todo_entity;
+import '../../../../domain/entities/todo.dart' as todo_entity;
 
 @HiveType(typeId: 0)
 class Todo extends HiveObject {

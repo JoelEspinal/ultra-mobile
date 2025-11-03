@@ -4,7 +4,7 @@ import 'package:ultra_mobile/src/data/network/todos_api/data_source/todo_respons
 
 import '../network/todos_api/data_source/todo.dart' as todo_model;
 import '../../domain/entities/todo.dart';
-import '../network/error_handler.dart';
+import '../../common/error_handler.dart';
 import '../network/todos_api/services/remote_todo_service.dart';
 import '../../domain/repositories/remote_todo_repository.dart';
 
