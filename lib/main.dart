@@ -1,15 +1,23 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
-import 'package:hive_ce_flutter/adapters.dart';
-import 'package:hive_ce_flutter/hive_flutter.dart';
+import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:ultra_mobile/src/data/database/hive/models/todo_adapter.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'src/app.dart';
-import 'src/data/database/hive/data_source/todo_local_data_source.dart';
+import 'src/data/database/hive/models/todo.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter();
-  await TodoLocalDataSourceImpl.init();
+  final String todoBoxName = 'todos';
 
+  WidgetsFlutterBinding.ensureInitialized();
+  final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
+  await Hive.initFlutter();
+
+  Hive
+    ..registerAdapter(TodoAdapter())
+    ..init(appDocumentsDir.path);
+  final todoBox = await Hive.openBox<Todo>(todoBoxName);
   runApp(const App());
 }

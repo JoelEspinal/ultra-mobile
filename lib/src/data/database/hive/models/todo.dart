@@ -1,61 +1,41 @@
-import 'package:hive_ce_flutter/adapters.dart';
-import 'package:hive_ce_flutter/hive_flutter.dart';
+import 'package:hive/hive.dart';
 
-import '../../../../domain/entities/todo.dart'
-    as todo_entity; // Import the Domain Entity
+import './../../../../domain/entities/todo.dart' as todo_entity;
 
 @HiveType(typeId: 0)
 class Todo extends HiveObject {
   @HiveField(0)
-  int localId;
-
+  final int id;
   @HiveField(1)
-  int id;
-
+  final String todo;
   @HiveField(2)
-  String todo;
-
+  final bool completed;
   @HiveField(3)
-  bool completed;
-
+  final int userId;
   @HiveField(4)
-  int userId;
-
+  final String? description;
   @HiveField(5)
-  String? description;
-
+  final DateTime? dueDate;
   @HiveField(6)
-  DateTime? dueDate;
-
+  final int? priority;
   @HiveField(7)
-  int? priority;
-
+  final String? category;
   @HiveField(8)
-  String? category;
-
+  final String? imagePath;
   @HiveField(9)
-  String? imagePath;
-
+  final DateTime? reminderTime;
   @HiveField(10)
-  DateTime? reminderTime;
-
+  final bool? isFavorite;
   @HiveField(11)
-  bool? isFavorite;
-
+  final String? createdAt;
   @HiveField(12)
-  String? createdAt;
+  final String? updatedAt;
 
-  @HiveField(13)
-  String? updatedAt;
-
-  // 2. Define a standard constructor for the model.
-  // NOTE: 'required' is removed, so default values must be provided for non-nullable final fields.
   Todo({
-    this.localId = 0,
-    this.id = 0,
-    this.todo = '',
-    this.completed = false,
-    this.userId = 0,
+    required this.id,
+    required this.todo,
+    required this.completed,
+    required this.userId,
     this.description,
     this.dueDate,
     this.priority,
@@ -67,7 +47,6 @@ class Todo extends HiveObject {
     this.updatedAt,
   });
 
-  // 4. Method to convert Data Model back to Domain Entity
   todo_entity.Todo toEntity() {
     return todo_entity.Todo(
       id: id,
@@ -86,14 +65,6 @@ class Todo extends HiveObject {
     );
   }
 
-  static List<todo_entity.Todo> toEntityList(List<Todo> models) {
-    return models.map((model) => model.toEntity()).toList();
-  }
-
-  static List<Todo> toTodoModelList(List<todo_entity.Todo> entities) {
-    return entities.map((entry) => Todo.fromTodoEntity(entry)).toList();
-  }
-
   factory Todo.fromTodoEntity(todo_entity.Todo todo) {
     return Todo(
         id: todo.id,
@@ -109,5 +80,13 @@ class Todo extends HiveObject {
         isFavorite: todo.isFavorite,
         createdAt: todo.createdAt,
         updatedAt: todo.updatedAt);
+  }
+
+  static List<todo_entity.Todo> toEntityList(List<Todo> models) {
+    return models.map((model) => model.toEntity()).toList();
+  }
+
+  static List<Todo> toTodoModelList(List<todo_entity.Todo> entities) {
+    return entities.map((entry) => Todo.fromTodoEntity(entry)).toList();
   }
 }

@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../data/database/hive/models/todo_model.dart';
+import '../../../data/database/hive/models/todo.dart';
 import '../../../domain/entities/todo.dart' as entity_todo;
 import '../../failures/failure.dart';
 import '../../repositories/local_todo_repository.dart';

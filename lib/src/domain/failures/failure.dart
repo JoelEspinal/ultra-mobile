@@ -48,7 +48,6 @@ class UnexpectedFailure extends Failure {
 
 // ----------   Local Failiures   ---------------
 
-
 class UnableSyncFailire extends Failure {
   const UnableSyncFailire() : super("Todo title cannot be empty.");
 }

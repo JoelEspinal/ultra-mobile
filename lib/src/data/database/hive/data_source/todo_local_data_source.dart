@@ -1,114 +1,79 @@
-import 'package:hive_ce_flutter/hive_flutter.dart';
+import 'package:hive/hive.dart';
 
-import '../models/todo_model.dart';
+import '../models/todo.dart';
 
 // Define the contract (interface) for the local data source
 abstract class TodoLocalDataSource {
   Future<void> addTodo(Todo todo);
-  Future<List<int>> addAll(List<Todo> todos);
-  // Todo? getTodo(int todoId);
-
-  Future<List<Todo>> getAllTodos();
+  Future<Todo?> getTodo(int todoId);
   Future<void> updateTodo(Todo todo);
   Future<void> deleteTodo(int id);
-  bool isBoxEmpty();
+  Future<bool> isBoxEmpty();
+
+  Future<List<int>> addAll(List<Todo> todos);
+  Future<List<Todo>> getAllTodos();
 }
 
 // Concrete Hive implementation
 class TodoLocalDataSourceImpl implements TodoLocalDataSource {
-  static late Box<Todo> _box;
-  static const String _todoBoxName = 'todos';
+  final String _todoBoxName = 'todos';
 
-  static Future<void> init() async {
-    // Check if the box is already open to prevent errors/warnings
-    if (!Hive.isBoxOpen(_todoBoxName)) {
-      _box = await Hive.openBox<Todo>(_todoBoxName);
-    } else {
-      _box = Hive.box<Todo>(_todoBoxName);
-    }
-  }
+  // Future<Box<Todo>> todoBox async {
+  //   final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
+
+  //   // Check if the box is already open to prevent errors/warnings
+  //   if (!Hive.isBoxOpen(_todoBoxName)) {
+  //     final openBox =
+  //         await Hive.openBox<Todo>(_todoBoxName, path: appDocumentsDir.path);
+  //     return Future.value(openBox);
+  //   } else {
+  //     return Future.value(Hive.box<Todo>(_todoBoxName));
+  //   }
+  // }
 
   Box<Todo> get todoBox {
-    return _box;
+    return Hive.box<Todo>(_todoBoxName);
   }
 
   @override
   Future<List<int>> addAll(List<Todo> todos) async {
-    var keys = await todoBox.addAll(todos);
-    var keyList = keys.toList();
-    return keyList;
+    final box = todoBox;
+    final keys = await box.addAll(todos);
+    return Future.value(keys.toList());
   }
-
-  // Future<List<Todo>> getAllTodos() {
-  //   final todoList = todoBox.values.toList();
-  //   return Future.value(todoList);
-  // }
-
-  // @override
-  // Todo? getTodo(int todoId) {
-  //   // TodoModel? todoModel = _todoBox.get(todoId);
-  //   final iterableTodo =
-  //       _todoBox.values.where((element) => element.id == todoId);
-  //   final todo = iterableTodo.firstOrNull;
-  //   if (todo != null) {
-  //     final todoEntity = todo.toEntity();
-  //     return todoEntity;
-  //   }
-
-  //   return null;
-
-  // if(todo != null) {
-  //     final resultTodo =
-  // }
-  // if (todoModel == null) return null;
-  // var result = todoModel.toEntity();
-  // return result;
-  // }
 
   @override
   Future<void> addTodo(Todo todo) async {
-    Todo todoModel = todo;
-
-    // Hive uses the model's type ID (0 in this case) and saves it
-    // await _todoBox.put(todoModel.id, todoModel);
-
-    final id = await todoBox.add(todoModel);
-    /**
-     * After save a new TodoModel
-     * 1. Get record from database
-     * 2. Update TodoModel.id if localTodo id is equal cero
-     * 3. Save todoModel with updated id
-     */
-    final iterableTodo = todoBox.values.where((model) => model.id == todo.id);
-    final localTodo = iterableTodo.firstOrNull;
+    final box = todoBox;
+    final key = await box.add(todo);
+    final localTodo = box.get(key);
 
     if (localTodo != null) {
-      // && id == 0) {
-      // if(id == 0) {
-      todoModel.id = todo.id;
-      todoModel.localId = todo.id;
-
-      await todoModel.save();
+      return await box.put(key, localTodo);
     }
+  }
 
-    return;
+  @override
+  Future<Todo?> getTodo(int todoId) async {
+    final iterableTodo = todoBox.values.where((model) => model.id == todoId);
+    var localTodo = iterableTodo.firstOrNull;
+    return Future.value(localTodo);
   }
 
   @override
   Future<List<Todo>> getAllTodos() async {
     try {
-      List<Todo> todos = [];
+      final box = todoBox;
+      List<Todo> todoList = [];
 
-      final modelKeys = todoBox.keys.toList();
+      final modelKeys = box.keys.toList();
       for (var key in modelKeys) {
-        final todo = await todoBox.get(key);
+        final todo = box.get(key);
         if (todo != null) {
-          todos.add(todo);
+          todoList.add(todo);
         }
       }
-
-      // await todoBox.close();
-      return todos;
+      return Future.value(todoList);
     } catch (e) {
       print('Error: Box contains wrong data type for Todo: $e');
       return [];
@@ -117,43 +82,35 @@ class TodoLocalDataSourceImpl implements TodoLocalDataSource {
 
   @override
   Future<void> updateTodo(Todo todo) async {
-    // final todoModel = TodoModel.fromEntity(todo);
-    // Use put with the key (ID) to overwrite the existing record
-    final iterableTodo = todoBox.values.where((model) => model.id == todo.id);
-    var localTodo = iterableTodo.firstOrNull;
-
-    var boxValues = todoBox.values.toList();
+    final box = todoBox;
+    final localTodo = await getTodo(todo.id);
 
     if (localTodo != null) {
-      // todoModel.id = todo.id;
-      // var localId = localTodo.localId;
-
-      localTodo.todo = todo.todo;
-      await localTodo.save();
-
-      // await _todoBox.put(localTodo.key, localTodo);
-      // await localTodo.save();
-      // await todoModel.save();
-      // await _todoBox.put(localId, todoModel);
-
-      var boxValues2 = todoBox.values.toList();
-
-      // await localTodo.save();
-
-      var boxValues3 = todoBox.values.toList();
-
-      // await todoModel.save();
-      // await _todoBox.put(todo.id, todoModel);
+      final key = getKeyFromValue(box, localTodo);
+      return box.put(key, todo);
     }
   }
 
   @override
   Future<void> deleteTodo(int id) async {
-    await todoBox.delete(id);
+    final box = todoBox;
+
+    await box.delete(id);
   }
 
   @override
-  bool isBoxEmpty() {
-    return todoBox.values.toList().isEmpty;
+  Future<bool> isBoxEmpty() async {
+    final box = todoBox;
+    final value = box.values.isEmpty;
+    return Future.value(value);
+  }
+
+  String? getKeyFromValue(Box box, dynamic targetValue) {
+    for (var entry in box.toMap().entries) {
+      if (entry.value == targetValue) {
+        return entry.key;
+      }
+    }
+    return null; // Value not found
   }
 }

@@ -193,8 +193,6 @@ class TodoDetailCubit extends Cubit<TodoDetailState> {
       updatedAt: nowFormatted,
     );
 
-    var a = TodoDetail.fromTodo(detailTodo);
-
     final result = await updateTodoUseCase.execute(detailTodo);
 
     result.fold(

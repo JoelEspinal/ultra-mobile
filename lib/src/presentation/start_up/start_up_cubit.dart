@@ -16,12 +16,20 @@ class StartupCubit extends Cubit<StartupState> {
   /// Fetches Todos from the API and syncs them into the Hive box.
   /// The state will not hold any data, only the status of the operation.
   Future<void> syncTodos() async {
+    emit(state.copyWith(status: StartupStatus.initial));
+
     emit(state.copyWith(status: StartupStatus.loading));
     try {
-      await _syncTodosUseCase.execute();
-
-      emit(
-        state.copyWith(status: StartupStatus.success),
+      final todoListResult = await _syncTodosUseCase.execute();
+      todoListResult.fold(
+        (l) {
+          emit(state.copyWith(errorMessage: l.message));
+        },
+        (r) {
+          emit(
+            state.copyWith(status: StartupStatus.success),
+          );
+        },
       );
     } catch (e) {
       emit(state.copyWith(

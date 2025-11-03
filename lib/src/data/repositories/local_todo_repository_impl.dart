@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import '../../domain/repositories/local_todo_repository.dart';
-import '../database/hive/models/todo_model.dart';
+import '../database/hive/models/todo.dart';
 import './../database/hive/data_source/todo_local_data_source.dart';
 
 class PersistenceRepositoryImpl implements LocalPersistenceRepository {
@@ -36,8 +36,8 @@ class PersistenceRepositoryImpl implements LocalPersistenceRepository {
   }
 
   @override
-  bool isBoxEmpty() {
-    return localDataSource.isBoxEmpty();
+  Future<bool> isBoxEmpty() async {
+    return await localDataSource.isBoxEmpty();
   }
 
   @override
@@ -45,15 +45,4 @@ class PersistenceRepositoryImpl implements LocalPersistenceRepository {
     final todoModelList = await localDataSource.getAllTodos();
     return Future.value(todoModelList);
   }
-
-  // @override
-  // Future<todo_entity.Todo?> getTodo(int id) async {
-  //   var value = localDataSource.getTodo(id);
-  //   return value;
-  // }
-
-  // @override
-  // Future<void> saveTodo(Todo todo) async {
-  //   await localDataSource.addTodo(todo);
-  // }
 }

@@ -1,7 +1,5 @@
 import 'package:bloc/bloc.dart';
 
-import '../../domain/entities/todo.dart' as todo_entity;
-import '../../data/database/hive/models/todo_model.dart' as todo_model;
 import '../../domain/failures/failure.dart';
 import '../../domain/use_cases/local_use_cases/delete_todo_use_case.dart';
 import '../../domain/use_cases/local_use_cases/fetch_todo_list_from_hive_use_case.dart';

@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
-import '../entities/todo.dart' show Todo;
-import '../../data/database/hive/models/todo_model.dart' as todo_model;
+import '../../data/database/hive/models/todo.dart' as todo_model;
 
 import '../failures/failure.dart';
 import '../repositories/local_todo_repository.dart';
@@ -17,7 +16,8 @@ class SyncTodosUseCase {
 
   Future<Either<Failure, List<int>>> execute() async {
     try {
-      if (localPersistenceRepository.isBoxEmpty()) {
+      final isEmpty = await localPersistenceRepository.isBoxEmpty();
+      if (isEmpty) {
         final remoteTodosResult = await remoteRepository.getTodoRemoteList();
 
         final todoModelList =
@@ -25,6 +25,7 @@ class SyncTodosUseCase {
 
         List<int> ids =
             await localPersistenceRepository.addTodoModelList(todoModelList);
+
         return Right(ids);
       }
 
