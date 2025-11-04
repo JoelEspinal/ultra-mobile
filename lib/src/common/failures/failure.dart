@@ -52,6 +52,11 @@ class UnableSyncFailire extends Failure {
   const UnableSyncFailire() : super("Todo title cannot be empty.");
 }
 
+class UnablToFindKeyFailire extends Failure {
+  const UnablToFindKeyFailire(String message)
+      : super("Cannot found key for id = $message");
+}
+
 class UnableToSaveLocalListFailure extends Failure {
   const UnableToSaveLocalListFailure(String message)
       : super("Unable lo save all local todos: $message");

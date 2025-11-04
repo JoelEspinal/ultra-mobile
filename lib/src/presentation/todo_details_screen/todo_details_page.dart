@@ -7,8 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../../domain/entities/todo.dart';
-import './todo_detail_cubit.dart';
-import 'todo_detail_status.dart';
+import 'todo_details_cubit.dart';
+import 'todo_details_status.dart';
 
 enum TodoDetailStatus { loading, success, failure }
 
@@ -52,8 +52,6 @@ class TodoDetailPage extends StatelessWidget {
         return Colors.green;
     }
   }
-
-  // --- BUILD METHOD ---
 
   @override
   Widget build(BuildContext context) {

@@ -5,13 +5,11 @@ import 'package:intl/intl.dart';
 import '../../common/failures/failure.dart';
 import '../../domain/entities/todo.dart';
 import '../../domain/use_cases/local_use_cases/update_todo_use_case.dart';
-import 'todo_detail_status.dart';
+import 'todo_details_status.dart';
 
 // import '../../domain/use_cases/update_todo_use_case.dart';
 
 class TodoDetailCubit extends Cubit<TodoDetailState> {
-  // final FetchTodoDetailUseCase _fetchTodoDetailUseCase;
-
   UpdateTodoUseCase updateTodoUseCase;
   final ImagePicker _imagePicker = ImagePicker();
 

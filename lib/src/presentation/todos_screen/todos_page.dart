@@ -19,8 +19,6 @@ class TodosPage extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 100.0),
-              // child: RefreshIndicator(
-              // onRefresh: () async => context.read<TodosCubit>().loadTodos(),
               child: Center(
                 child: BlocBuilder<TodosCubit, TodosState>(
                   builder: (context, state) {
@@ -48,11 +46,10 @@ class TodosPage extends StatelessWidget {
                                   onConfirm: () async {
                                     context
                                         .read<TodosCubit>()
-                                        .deleteTodo(state.todos[index].id);
+                                        .deleteTodo(todo.id);
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        content: Text(
-                                            'Deleted "${state.todos[index].todo}"'),
+                                        content: Text('Deleted "${todo.todo}"'),
                                       ),
                                     );
                                   },
@@ -63,12 +60,11 @@ class TodosPage extends StatelessWidget {
                                 height: 100.0,
                                 child: ListTile(
                                   onTap: () async {
-                                    await _goToTodoDetail(
-                                        context, state.todos[index]);
+                                    await _goToTodoDetail(context, todo);
                                   },
                                   title: Text(
-                                    state.todos[index].todo,
-                                    style: state.todos[index].completed
+                                    todo.todo,
+                                    style: todo.completed
                                         ? TextStyle(
                                             fontWeight: FontWeight.bold,
                                             decoration:
@@ -81,10 +77,9 @@ class TodosPage extends StatelessWidget {
                                   leading: IconButton(
                                     onPressed: () => context
                                         .read<TodosCubit>()
-                                        .toggleTodoStatus(
-                                            state.todos[index].id),
+                                        .toggleTodoStatus(todo.id),
                                     icon: Icon(
-                                      state.todos[index].completed
+                                      todo.completed
                                           ? Icons.check_box
                                           : Icons.check_box_outline_blank,
                                     ),
@@ -92,13 +87,12 @@ class TodosPage extends StatelessWidget {
                                   trailing: IconButton(
                                     onPressed: () {
                                       context.read<TodosCubit>().toggleFavorite(
-                                            state.todos[index].id,
+                                            todo.id,
                                           );
                                     },
                                     icon: Icon(
-                                      (state.todos[index].isFavorite != null &&
-                                              state.todos[index].isFavorite ==
-                                                  true)
+                                      (todo.isFavorite != null &&
+                                              todo.isFavorite == true)
                                           ? Icons.star
                                           : Icons.star_border,
                                       color: Colors.amberAccent,

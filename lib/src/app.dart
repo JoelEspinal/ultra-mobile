@@ -17,8 +17,8 @@ import 'domain/use_cases/local_use_cases/update_todo_use_case.dart';
 import 'domain/use_cases/sync_todos_use_case.dart';
 import 'presentation/start_up/splash_screen.dart';
 import 'presentation/start_up/start_up_cubit.dart';
-import 'presentation/todo_screen/todo_detail_cubit.dart';
-import 'presentation/todo_screen/todo_detail_page.dart';
+import 'presentation/todo_details_screen/todo_details_cubit.dart';
+import 'presentation/todo_details_screen/todo_details_page.dart';
 import 'presentation/todos_screen/todos_cubit.dart';
 import 'presentation/todos_screen/todos_page.dart';
 

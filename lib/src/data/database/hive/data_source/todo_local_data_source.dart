@@ -1,5 +1,7 @@
+import 'package:dartz/dartz.dart';
 import 'package:hive/hive.dart';
 
+import '../../../../common/failures/failure.dart';
 import '../models/todo.dart';
 
 class TodoLocalDataSource {
@@ -46,7 +48,7 @@ class TodoLocalDataSource {
       return Future.value(todoList);
     } catch (e) {
       print('Error: Box contains wrong data type for Todo: $e');
-      
+
       return [];
     }
   }
@@ -62,9 +64,16 @@ class TodoLocalDataSource {
   }
 
   Future<void> deleteTodo(int id) async {
-    final box = todoBox;
+    try {
+      final box = todoBox;
+      Todo todoValue = box.values.firstWhere((element) => element.id == id);
+      final key = getKeyFromValue(box, todoValue);
+      if (key == null) throw UnablToFindKeyFailire("$id");
 
-    await box.delete(id);
+      return await box.delete(key);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<bool> isBoxEmpty() async {
@@ -73,9 +82,9 @@ class TodoLocalDataSource {
     return Future.value(value);
   }
 
-  String? getKeyFromValue(Box box, dynamic targetValue) {
+  int? getKeyFromValue(Box box, Todo targetValue) {
     for (var entry in box.toMap().entries) {
-      if (entry.value == targetValue) {
+      if (entry.value.id == targetValue.id) {
         return entry.key;
       }
     }
