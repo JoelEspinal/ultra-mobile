@@ -51,3 +51,55 @@ class UnexpectedFailure extends Failure {
 class UnableSyncFailire extends Failure {
   const UnableSyncFailire() : super("Todo title cannot be empty.");
 }
+
+class UnableToSaveLocalListFailure extends Failure {
+  const UnableToSaveLocalListFailure(String message)
+      : super("Unable lo save all local todos: $message");
+}
+
+class UnableDeleteFailure extends Failure {
+  const UnableDeleteFailure(String message)
+      : super("Unable lo delete local todos: $message");
+}
+
+class UnableUpdateFailure extends Failure {
+  const UnableUpdateFailure(
+    String message,
+  ) : super("Unable lo delete local todos: $message");
+}
+
+class UnableOpenBox extends Failure {
+  const UnableOpenBox(
+    String message,
+  ) : super("Unable to check Hive Box: $message");
+}
+
+class UnableToObtainAllTodos extends Failure {
+  const UnableToObtainAllTodos(
+    String message,
+  ) : super("Unable to get all todos: $message");
+}
+
+class UnableToAddTodos extends Failure {
+  const UnableToAddTodos(
+    String message,
+  ) : super("Unable to add all todos: $message");
+}
+
+class UnableToAddTodo extends Failure {
+  const UnableToAddTodo(
+    String message,
+  ) : super("Unable to add todo: $message");
+}
+
+class UnableToAddLocalTodos extends Failure {
+  const UnableToAddLocalTodos(
+    String message,
+  ) : super("Unable to add local todos: $message");
+}
+
+class UnablaToFIndLocalTodo extends Failure {
+  const UnablaToFIndLocalTodo(
+    String message,
+  ) : super("Unable to find local todos: $message");
+}

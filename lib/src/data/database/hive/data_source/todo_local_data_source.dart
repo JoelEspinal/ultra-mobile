@@ -46,6 +46,7 @@ class TodoLocalDataSource {
       return Future.value(todoList);
     } catch (e) {
       print('Error: Box contains wrong data type for Todo: $e');
+      
       return [];
     }
   }

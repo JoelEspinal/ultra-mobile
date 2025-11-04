@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:ultra_mobile/src/data/network/todos_api/data_source/todo_response.dart';
+import '../network/todos_api/data_source/todo_response.dart';
 
 import '../network/todos_api/data_source/todo.dart' as todo_model;
 import '../../domain/entities/todo.dart';
