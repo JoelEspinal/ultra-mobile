@@ -86,9 +86,10 @@ class TodosPage extends StatelessWidget {
                                   ),
                                   trailing: IconButton(
                                     onPressed: () {
-                                      context.read<TodosCubit>().toggleFavorite(
-                                            todo.id,
-                                          );
+                                      context
+                                          .read<TodosCubit>()
+                                          .toggleFavorite(todo.id);
+                                      context.read<TodosCubit>().
                                     },
                                     icon: Icon(
                                       (todo.isFavorite != null &&

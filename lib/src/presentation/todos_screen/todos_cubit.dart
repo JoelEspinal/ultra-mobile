@@ -8,6 +8,7 @@ import 'todos_state.dart';
 class TodosCubit extends Cubit<TodosState> {
   final FetchLocalTodoUseCase fetchLocalTodoUseCase;
   final DeleteTodoUseCase deleteTodoUseCase;
+  final 
 
   TodosCubit(
       {required this.fetchLocalTodoUseCase, required this.deleteTodoUseCase})
