@@ -1,4 +1,3 @@
-import 'package:dartz/dartz.dart';
 import 'package:hive/hive.dart';
 
 import '../../../../common/failures/failure.dart';
@@ -55,12 +54,8 @@ class TodoLocalDataSource {
 
   Future<void> updateTodo(Todo todo) async {
     final box = todoBox;
-    final localTodo = await getTodo(todo.id);
-
-    if (localTodo != null) {
-      final key = getKeyFromValue(box, localTodo);
-      return box.put(key, todo);
-    }
+    final key = getKeyFromValue(box, todo);
+    return box.put(key, todo);
   }
 
   Future<void> deleteTodo(int id) async {
