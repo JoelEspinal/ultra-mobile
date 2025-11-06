@@ -82,6 +82,38 @@ class Todo extends HiveObject {
         updatedAt: todo.updatedAt);
   }
 
+  Todo copyWith({
+    int? id,
+    String? todo,
+    bool? completed,
+    int? userId,
+    String? description,
+    DateTime? dueDate,
+    int? priority,
+    String? category,
+    String? imagePath,
+    DateTime? reminderTime,
+    bool? isFavorite,
+    String? createdAt,
+    String? updatedAt,
+  }) {
+    return Todo(
+      id: id ?? this.id,
+      todo: todo ?? this.todo,
+      completed: completed ?? this.completed,
+      userId: userId ?? this.userId,
+      description: description ?? this.description,
+      dueDate: dueDate ?? this.dueDate,
+      priority: priority ?? this.priority,
+      category: category ?? this.category,
+      imagePath: imagePath ?? this.imagePath,
+      reminderTime: reminderTime ?? this.reminderTime,
+      isFavorite: isFavorite ?? this.isFavorite,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
   static List<todo_entity.Todo> toEntityList(List<Todo> models) {
     return models.map((model) => model.toEntity()).toList();
   }
