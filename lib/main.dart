@@ -15,9 +15,8 @@ void main() async {
   final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
   await Hive.initFlutter();
 
-  Hive
-    ..registerAdapter(TodoAdapter())
-    ..init(appDocumentsDir.path);
+  Hive.registerAdapter(TodoAdapter());
+  Hive.init(appDocumentsDir.path);
   await Hive.openBox<Todo>(todoBoxName);
   runApp(const App());
 }
