@@ -108,3 +108,20 @@ class UnablaToFIndLocalTodo extends Failure {
     String message,
   ) : super("Unable to find local todos: $message");
 }
+
+class FavoriteIsNullFailure extends Failure {
+  const FavoriteIsNullFailure(
+    String message,
+  ) : super("Cannot asign to null Value: $message");
+}
+
+class UnablToFindTodoFailire extends Failure {
+  const UnablToFindTodoFailire(String message)
+      : super("Cannot found Todo for id = $message");
+}
+
+class CannotUpdateNullValueFailure extends Failure {
+  const CannotUpdateNullValueFailure(
+    String message,
+  ) : super("Cannot update null Value: $message");
+}
