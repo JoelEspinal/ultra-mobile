@@ -60,6 +60,9 @@ class TodosPage extends StatelessWidget {
                                 height: 100.0,
                                 child: ListTile(
                                   onTap: () async {
+                                    final cubit =
+                                        await context.read<TodosCubit>();
+                                    await cubit.loadTodos();
                                     await _goToTodoDetail(context, todo);
                                   },
                                   title: Text(
@@ -84,21 +87,34 @@ class TodosPage extends StatelessWidget {
                                           : Icons.check_box_outline_blank,
                                     ),
                                   ),
-                                  trailing: IconButton(
-                                    onPressed: () {
-                                      context
-                                          .read<TodosCubit>()
-                                          .toggleFavorite(todo.id);
-                                      context.read<TodosCubit>().
-                                    },
-                                    icon: Icon(
-                                      (todo.isFavorite != null &&
-                                              todo.isFavorite == true)
-                                          ? Icons.star
-                                          : Icons.star_border,
-                                      color: Colors.amberAccent,
-                                    ),
-                                  ),
+                                  trailing: BlocBuilder<TodosCubit, TodosState>(
+                                      builder: (context, state) {
+                                    void onPressAction() => context
+                                        .read<TodosCubit>()
+                                        .toggleFavorite(
+                                          todo.id,
+                                        );
+
+                                    final favoriteTodo = state.todos
+                                        .where(
+                                            (element) => element.id == todo.id)
+                                        .first;
+                                    if (favoriteTodo.isFavorite ??= false) {
+                                      return IconButton(
+                                        icon: Icon(
+                                          Icons.star,
+                                          color: Colors.amberAccent,
+                                        ),
+                                        onPressed: onPressAction,
+                                      );
+                                    } else {
+                                      return IconButton(
+                                        icon: Icon(Icons.star_border,
+                                            color: Colors.amberAccent),
+                                        onPressed: onPressAction,
+                                      );
+                                    }
+                                  }),
                                 ),
                               ),
                             );
