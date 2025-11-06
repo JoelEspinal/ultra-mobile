@@ -13,6 +13,7 @@ import 'domain/repositories/remote_todo_repository.dart';
 import 'domain/use_cases/local_use_cases/delete_todo_use_case.dart';
 import 'domain/use_cases/local_use_cases/fetch_todo_list_from_hive_use_case.dart';
 import 'domain/use_cases/local_use_cases/save_todo_list_use_case.dart';
+import 'domain/use_cases/local_use_cases/toggle_favorite_todo_use_case.dart';
 import 'domain/use_cases/local_use_cases/update_todo_use_case.dart';
 import 'domain/use_cases/sync_todos_use_case.dart';
 import 'presentation/start_up/splash_screen.dart';
@@ -65,6 +66,12 @@ class App extends StatelessWidget {
               persistenceRepository:
                   context.read<LocalPersistenceRepository>()),
         ),
+        Provider<ToggleFavoriteTodoUseCase>(
+          create: (context) => ToggleFavoriteTodoUseCase(
+            localPersistenceRepository:
+                context.read<LocalPersistenceRepository>(),
+          ),
+        ),
         Provider<SyncTodosUseCase>(
           create: (context) => SyncTodosUseCase(
               remoteRepository: context.read<RemoteTodoRepository>(),
@@ -88,6 +95,8 @@ class App extends StatelessWidget {
                     fetchLocalTodoUseCase:
                         context.read<FetchLocalTodoUseCase>(),
                     deleteTodoUseCase: context.read<DeleteTodoUseCase>(),
+                    toggleFavoriteTodoUseCase:
+                        context.read<ToggleFavoriteTodoUseCase>(),
                   );
                 },
                 child: const TodosPage(),
