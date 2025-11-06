@@ -85,11 +85,27 @@ class LocalPersistenceRepositoryImpl implements LocalPersistenceRepository {
   }
 
   @override
-  Future<Todo?> getTodo(int todoId) {
+  Future<Todo?> getTodo(int id) {
     try {
-      return localDataSource.getTodo(todoId);
+      return localDataSource.getTodo(id);
     } catch (e) {
       throw UnablaToFIndLocalTodo(e.toString());
+    }
+  }
+
+  @override
+  Future<Todo> toggleFavorite(Todo todo) async {
+    try {
+      if (todo.isFavorite == null) {
+        final result = todo.copyWith(isFavorite: false);
+        return Future.value(result);
+      } else {
+        bool result = todo.isFavorite! ? false : true;
+        final resultTodo = todo.copyWith(isFavorite: result);
+        return Future.value(resultTodo);
+      }
+    } catch (e) {
+      throw Exception('Failed to toggle favorite: $e');
     }
   }
 }

@@ -17,7 +17,12 @@ class UpdateTodoUseCase {
       }
 
       final todoModel = Todo.fromTodoEntity(todo);
-      await persistenceRepository.updateTodo(todoModel);
+      final foundTodo = await persistenceRepository.getTodo(todoModel.id);
+      if (foundTodo == null) {
+        throw UnablToFindTodoFailire("$id");
+      }
+
+      await persistenceRepository.updateTodo(foundTodo);
       return Future.value(Right(unit));
     } catch (e) {
       return Left(ServerFailure('Failed to update todo: $e'));

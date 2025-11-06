@@ -13,6 +13,12 @@ class DeleteTodoUseCase {
 
   Future<Either<Failure, void>> execute(int id) async {
     try {
+      final todo = await localPersistenceRepository.getTodo(id);
+
+      if (todo == null) {
+        return Left(CannotUpdateNullValueFailure("todo is null"));
+      }
+
       await localPersistenceRepository.deleteTodo(id);
 
       return Future.value(Right(unit));
