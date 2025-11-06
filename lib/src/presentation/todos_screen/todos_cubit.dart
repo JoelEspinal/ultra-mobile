@@ -1,18 +1,22 @@
 import 'package:bloc/bloc.dart';
+import 'package:dartz/dartz.dart';
 
 import '../../common/failures/failure.dart';
 import '../../domain/use_cases/local_use_cases/delete_todo_use_case.dart';
 import '../../domain/use_cases/local_use_cases/fetch_todo_list_from_hive_use_case.dart';
+import '../../domain/use_cases/local_use_cases/toggle_favorite_todo_use_case.dart';
 import 'todos_state.dart';
 
 class TodosCubit extends Cubit<TodosState> {
   final FetchLocalTodoUseCase fetchLocalTodoUseCase;
   final DeleteTodoUseCase deleteTodoUseCase;
-  final 
+  final ToggleFavoriteTodoUseCase toggleFavoriteTodoUseCase;
 
-  TodosCubit(
-      {required this.fetchLocalTodoUseCase, required this.deleteTodoUseCase})
-      : super(const TodosState());
+  TodosCubit({
+    required this.fetchLocalTodoUseCase,
+    required this.deleteTodoUseCase,
+    required this.toggleFavoriteTodoUseCase,
+  }) : super(const TodosState());
 
   // 2. Event Handler: This method is called by the UI (the View).
   Future<void> loadTodos([String? filter]) async {
@@ -93,19 +97,31 @@ class TodosCubit extends Cubit<TodosState> {
   }
 
   // Toggle favorite status
-  void toggleFavorite(int todoId) {
-    if (state.todos.isEmpty) return;
+  void toggleFavorite(int todoId) async {
+    emit(state.copyWith(
+      status: TodoStatus.loading,
+    ));
 
-    final updatedTodos = state.todos.map((todo) {
-      return todo.id == todoId
-          ? todo.copyWith(
-              isFavorite: () => !(todo.isFavorite ?? false),
-            )
-          : todo;
-    }).toList();
-
-    // Emit a new success state immediately for optimistic UI update
-    emit(state.copyWith(todos: updatedTodos));
+    final toggleResult = await toggleFavoriteTodoUseCase.execute(todoId);
+    toggleResult.fold(
+      (l) {
+        emit(state.copyWith(errorMessage: l.message));
+      },
+      (r) async {
+        final resulTodos = await fetchLocalTodoUseCase.execute();
+        resulTodos.fold(
+          (left) => Left(left),
+          (right) {
+            emit(
+              state.copyWith(
+                status: TodoStatus.success,
+                todos: right,
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   void deleteTodo(int todoId) async {
