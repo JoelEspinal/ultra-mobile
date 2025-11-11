@@ -125,3 +125,9 @@ class CannotUpdateNullValueFailure extends Failure {
     String message,
   ) : super("Cannot update null Value: $message");
 }
+
+class CannotUpdateToggleCompleteFailure extends Failure {
+  const CannotUpdateToggleCompleteFailure(
+    String message,
+  ) : super("Cannot update completed Todo: $message");
+}

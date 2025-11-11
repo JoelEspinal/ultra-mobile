@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:ultra_mobile/src/domain/use_cases/local_use_cases/toggle_completed_todo_use_case.dart';
 
 import '../../src/domain/entities/todo.dart' as entity_todo;
 import 'data/database/hive/data_source/todo_local_data_source.dart';
@@ -72,6 +73,12 @@ class App extends StatelessWidget {
                 context.read<LocalPersistenceRepository>(),
           ),
         ),
+        Provider<ToggleCompleteTodoUseCase>(
+          create: (context) => ToggleCompleteTodoUseCase(
+            localPersistenceRepository:
+                context.read<LocalPersistenceRepository>(),
+          ),
+        ),
         Provider<SyncTodosUseCase>(
           create: (context) => SyncTodosUseCase(
               remoteRepository: context.read<RemoteTodoRepository>(),
@@ -97,6 +104,8 @@ class App extends StatelessWidget {
                     deleteTodoUseCase: context.read<DeleteTodoUseCase>(),
                     toggleFavoriteTodoUseCase:
                         context.read<ToggleFavoriteTodoUseCase>(),
+                    toggleCompleteTodoUseCase:
+                        context.read<ToggleCompleteTodoUseCase>(),
                   );
                 },
                 child: const TodosPage(),
