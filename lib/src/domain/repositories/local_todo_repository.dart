@@ -7,6 +7,7 @@ abstract class LocalPersistenceRepository {
   Future<void> updateTodo(Todo todo);
   Future<void> deleteTodo(int id);
   Future<Todo> toggleFavorite(Todo todo);
+  Future<Todo> toggleCompleted(Todo todo);
 
   Future<List<Todo>> getAllTodos();
   Future<List<int>> addAll(List<Todo> todos);

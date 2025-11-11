@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import '../../common/failures/failure.dart';
 import '../../domain/use_cases/local_use_cases/delete_todo_use_case.dart';
 import '../../domain/use_cases/local_use_cases/fetch_todo_list_from_hive_use_case.dart';
+import '../../domain/use_cases/local_use_cases/toggle_completed_todo_use_case.dart';
 import '../../domain/use_cases/local_use_cases/toggle_favorite_todo_use_case.dart';
 import 'todos_state.dart';
 
@@ -11,11 +12,13 @@ class TodosCubit extends Cubit<TodosState> {
   final FetchLocalTodoUseCase fetchLocalTodoUseCase;
   final DeleteTodoUseCase deleteTodoUseCase;
   final ToggleFavoriteTodoUseCase toggleFavoriteTodoUseCase;
+  final ToggleCompleteTodoUseCase toggleCompleteTodoUseCase;
 
   TodosCubit({
     required this.fetchLocalTodoUseCase,
     required this.deleteTodoUseCase,
     required this.toggleFavoriteTodoUseCase,
+    required this.toggleCompleteTodoUseCase,
   }) : super(const TodosState());
 
   // 2. Event Handler: This method is called by the UI (the View).
@@ -105,7 +108,33 @@ class TodosCubit extends Cubit<TodosState> {
     final toggleResult = await toggleFavoriteTodoUseCase.execute(todoId);
     toggleResult.fold(
       (l) {
-        emit(state.copyWith(errorMessage: l.message));
+        emit(state.copyWith(
+            status: TodoStatus.failure, errorMessage: l.message));
+      },
+      (r) async {
+        final resulTodos = await fetchLocalTodoUseCase.execute();
+        resulTodos.fold(
+          (left) => Left(left),
+          (right) {
+            emit(
+              state.copyWith(
+                status: TodoStatus.success,
+                todos: right,
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void toggleCompleted(int todoId) async {
+    emit(state.copyWith(status: TodoStatus.loading));
+    final result = await toggleCompleteTodoUseCase.execute(todoId);
+    result.fold(
+      (l) {
+        emit(state.copyWith(
+            status: TodoStatus.failure, errorMessage: l.message));
       },
       (r) async {
         final resulTodos = await fetchLocalTodoUseCase.execute();

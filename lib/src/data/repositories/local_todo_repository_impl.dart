@@ -108,4 +108,10 @@ class LocalPersistenceRepositoryImpl implements LocalPersistenceRepository {
       throw Exception('Failed to toggle favorite: $e');
     }
   }
+
+  @override
+  Future<Todo> toggleCompleted(Todo todo) {
+    final updatedTodo = todo.copyWith(completed: !todo.completed);
+    return Future.value(updatedTodo);
+  }
 }
