@@ -18,7 +18,7 @@ class TodoAdapter extends TypeAdapter<Todo> {
     };
     return Todo(
       id: fields[0] as int,
-      task: fields[1] as String,
+      todo: fields[1] as String,
       completed: fields[2] as bool,
       userId: fields[3] as int,
       description: fields[4] as String?,
@@ -40,7 +40,7 @@ class TodoAdapter extends TypeAdapter<Todo> {
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.task)
+      ..write(obj.todo)
       ..writeByte(2)
       ..write(obj.completed)
       ..writeByte(3)

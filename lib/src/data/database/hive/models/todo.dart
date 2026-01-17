@@ -9,7 +9,7 @@ class Todo extends HiveObject {
   @HiveField(0)
   final int id;
   @HiveField(1)
-  final String task;
+  final String todo;
   @HiveField(2)
   final bool completed;
   @HiveField(3)
@@ -35,7 +35,7 @@ class Todo extends HiveObject {
 
   Todo({
     required this.id,
-    required this.task,
+    required this.todo,
     required this.completed,
     required this.userId,
     this.description,
@@ -52,7 +52,7 @@ class Todo extends HiveObject {
   todo_entity.Todo toEntity() {
     return todo_entity.Todo(
       id: id,
-      task: task,
+      todo: todo,
       completed: completed,
       userId: userId,
       description: description,
@@ -70,7 +70,7 @@ class Todo extends HiveObject {
   factory Todo.fromTodoEntity(todo_entity.Todo todo) {
     return Todo(
         id: todo.id,
-        task: todo.task,
+        todo: todo.todo ?? '',
         completed: todo.completed,
         userId: todo.userId,
         description: todo.description,
@@ -86,7 +86,7 @@ class Todo extends HiveObject {
 
   Todo copyWith({
     int? id,
-    String? task,
+    String? todo,
     bool? completed,
     int? userId,
     String? description,
@@ -101,7 +101,7 @@ class Todo extends HiveObject {
   }) {
     return Todo(
       id: id ?? this.id,
-      task: task ?? this.task,
+      todo: todo ?? this.todo,
       completed: completed ?? this.completed,
       userId: userId ?? this.userId,
       description: description ?? this.description,

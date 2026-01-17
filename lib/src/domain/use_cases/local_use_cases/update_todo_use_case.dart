@@ -12,7 +12,7 @@ class UpdateTodoUseCase {
 
   Future<Either<Failure, Unit>> execute(todo_entity.Todo todo) async {
     try {
-      if (todo.todo.trim().isEmpty) {
+      if (todo.todo?.trim().isEmpty ?? true) {
         return Left(ValidationFailure());
       }
 

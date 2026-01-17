@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 
 class Todo {
   int id;
-  String task;
+  String? todo;
   bool completed;
   int userId;
   // optional fields
@@ -21,7 +21,7 @@ class Todo {
 
   Todo({
     required this.id,
-    required this.task,
+    required this.todo,
     required this.completed,
     required this.userId,
     this.description,
@@ -38,7 +38,7 @@ class Todo {
 
   Todo copyWith({
     int? id,
-    String? task,
+    String? todo,
     bool? completed,
     int? userId,
     ValueGetter<String?>? description,
@@ -54,7 +54,7 @@ class Todo {
   }) {
     return Todo(
       id: id ?? this.id,
-      task: task ?? this.task,
+      todo: todo ?? this.todo,
       completed: completed ?? this.completed,
       userId: userId ?? this.userId,
       description: description != null ? description() : this.description,
@@ -73,7 +73,7 @@ class Todo {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'todo': task, // Keeping 'todo' key for API compatibility
+      'todo': todo, // Keeping 'todo' key for API compatibility
       'completed': completed,
       'userId': userId,
       'description': description,
@@ -92,7 +92,7 @@ class Todo {
   factory Todo.fromMap(Map<String, dynamic> map) {
     return Todo(
       id: map['id']?.toInt() ?? 0,
-      task: map['todo'] ?? '', // Mapping 'todo' key to task field
+      todo: map['todo'] ?? '', // Mapping 'todo' key to todo field
       completed: map['completed'] ?? false,
       userId: map['userId']?.toInt() ?? 0,
       description: map['description'],
@@ -118,7 +118,7 @@ class Todo {
 
   @override
   String toString() {
-    return 'Todo(id: $id, task: $task, completed: $completed, userId: $userId, description: $description, dueDate: $dueDate, priority: $priority, category: $category, imageUrl: $imageUrl, reminderTime: $reminderTime, isFavorite: $isFavorite, imagePath: $imagePath, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Todo(id: $id, todo: $todo, completed: $completed, userId: $userId, description: $description, dueDate: $dueDate, priority: $priority, category: $category, imageUrl: $imageUrl, reminderTime: $reminderTime, isFavorite: $isFavorite, imagePath: $imagePath, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -127,7 +127,7 @@ class Todo {
 
     return other is Todo &&
         other.id == id &&
-        other.task == task &&
+        other.todo == todo &&
         other.completed == completed &&
         other.userId == userId &&
         other.description == description &&
@@ -145,7 +145,7 @@ class Todo {
   @override
   int get hashCode {
     return id.hashCode ^
-        task.hashCode ^
+        todo.hashCode ^
         completed.hashCode ^
         userId.hashCode ^
         description.hashCode ^

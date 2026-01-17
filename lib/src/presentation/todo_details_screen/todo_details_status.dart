@@ -6,7 +6,7 @@ enum Priority { high, medium, low }
 
 class TodoDetail {
   final int id;
-  final String task;
+  final String? todo;
   final bool completed;
   final String description;
   final DateTime? dueDate;
@@ -19,7 +19,7 @@ class TodoDetail {
 
   const TodoDetail({
     required this.id,
-    required this.task,
+    required this.todo,
     required this.completed,
     this.description = '',
     this.dueDate,
@@ -46,7 +46,7 @@ class TodoDetail {
   }) {
     return TodoDetail(
       id: id ?? this.id,
-      task: task ?? this.task,
+      todo: task ?? this.todo,
       completed: completed ?? this.completed,
       description: description ?? this.description,
       dueDate: dueDate ?? this.dueDate,
@@ -62,11 +62,13 @@ class TodoDetail {
   // Factory to create from basic Todo entity
   factory TodoDetail.fromTodo(Todo todo) {
     // Ensure we use the Priority enum directly, or default to medium if null
-    final Priority priority = (todo.priority is Priority) ? todo.priority as Priority : Priority.medium;
+    final Priority priority = (todo.priority is Priority)
+        ? todo.priority as Priority
+        : Priority.medium;
 
     return TodoDetail(
       id: todo.id,
-      task: todo.task,
+      todo: todo.todo,
       completed: todo.completed,
       userId: todo.userId,
       category: todo.category ??= "",

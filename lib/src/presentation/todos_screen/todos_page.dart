@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../domain/entities/todo.dart';
 import '../widgets/show_bottom_confirmation_sheet.dart';
 import 'todos_cubit.dart';
 import 'todos_state.dart';
@@ -49,7 +48,7 @@ class TodosPage extends StatelessWidget {
                                         .deleteTodo(todo.id);
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        content: Text('Deleted "${todo.task}"'),
+                                        content: Text('Deleted "${todo.todo}"'),
                                       ),
                                     );
                                   },
@@ -66,14 +65,14 @@ class TodosPage extends StatelessWidget {
                                       arguments: todo,
                                     );
 
-                                    if (result == true) {
+                                    if (context.mounted && result == true) {
                                       await context
                                           .read<TodosCubit>()
                                           .loadTodos();
                                     }
                                   },
                                   title: Text(
-                                    todo.task,
+                                    todo.todo ?? '',
                                     style: todo.completed
                                         ? TextStyle(
                                             fontWeight: FontWeight.bold,
@@ -97,7 +96,7 @@ class TodosPage extends StatelessWidget {
                                               element.id == todo.id)
                                           .first;
 
-                                      if (completedTodo.completed ??= false) {
+                                      if (completedTodo.completed) {
                                         return IconButton(
                                           icon: Icon(Icons.check_box),
                                           onPressed: onPressAction,

@@ -50,7 +50,7 @@ class TodosPage extends StatelessWidget {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
-                                            'Deleted "${state.todos[index].task}"'),
+                                            'Deleted "${state.todos[index].todo}"'),
                                       ),
                                     );
                                   },
@@ -65,7 +65,7 @@ class TodosPage extends StatelessWidget {
                                         context, state.todos[index]);
                                   },
                                   title: Text(
-                                    state.todos[index].task,
+                                    state.todos[index].todo ?? '',
                                     style: state.todos[index].completed
                                         ? TextStyle(
                                             fontWeight: FontWeight.bold,

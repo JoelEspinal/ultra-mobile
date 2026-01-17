@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'src/app.dart';
 import 'src/data/database/hive/models/todo.dart';
+import 'src/data/database/hive/models/todo_adapter.dart';
 
 void main() async {
   final String todoBoxName = 'todos';
