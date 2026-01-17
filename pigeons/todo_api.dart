@@ -9,7 +9,7 @@ import 'package:pigeon/pigeon.dart';
   swiftOptions: SwiftOptions(),
 ))
 
-class PigeonTodoDetail {
+class TodoDetailNative {
   final int id;
   final String? description;
   final String? category;
@@ -17,7 +17,7 @@ class PigeonTodoDetail {
   final int? dueDate; // Milliseconds since epoch
   final String? imageUrl;
 
-  PigeonTodoDetail({
+  TodoDetailNative({
     required this.id,
     this.description,
     this.category,
@@ -30,7 +30,7 @@ class PigeonTodoDetail {
 @HostApi()
 abstract class TodoNativeApi {
   @async
-  PigeonTodoDetail fetchTodoDetail(int id);
+  TodoDetailNative fetchTodoDetail(int id);
 }
 
 @FlutterApi()
