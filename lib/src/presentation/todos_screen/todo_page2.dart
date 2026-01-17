@@ -159,7 +159,7 @@ class TodosPage extends StatelessWidget {
       arguments: todo,
     );
 
-    if (result == true) {
+    if (context.mounted && result == true) {
       await context.read<TodosCubit>().loadTodos();
     }
   }

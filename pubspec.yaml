@@ -9,9 +9,6 @@ version: 1.0.0+1
 environment:
   sdk: '>=3.0.1 <4.0.0'
 
-dependency_overrides:
-  collection: any
-  analyzer: any
 
 dependencies:
   flutter:
@@ -36,8 +33,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  hive_generator: ^1.0.0
+  hive_generator: ^2.0.0
   build_runner: ^2.4.7
+  pigeon: ^22.7.2
 
   
   # custom_lint: ^0.0.16

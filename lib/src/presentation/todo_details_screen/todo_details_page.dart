@@ -55,7 +55,8 @@ class TodoDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<TodoDetailCubit>().loadTodoDetail(todo);
+    final cubit = context.read<TodoDetailCubit>();
+    cubit.loadTodoDetail(todo);
 
     return Scaffold(
       appBar: AppBar(
@@ -69,23 +70,22 @@ class TodoDetailPage extends StatelessWidget {
         actions: [
           BlocBuilder<TodoDetailCubit, TodoDetailState>(
             builder: (context, state) {
-              if (state.todoDetail != null) {
+              void onPressAction() =>
+                  context.read<TodoDetailCubit>().toggleFavorite();
+              if (state.todoDetail?.isFavorite == true) {
                 return IconButton(
-                  onPressed: () {
-                    context.read<TodoDetailCubit>().toggleFavorite();
-                  },
                   icon: Icon(
-                    (state.todoDetail != null)
-                        ? (state.todoDetail?.isFavorite != null &&
-                                state.todoDetail?.isFavorite == true)
-                            ? Icons.star
-                            : Icons.star_border
-                        : Icons.star_border,
+                    Icons.star,
                     color: Colors.amberAccent,
                   ),
+                  onPressed: onPressAction,
+                );
+              } else {
+                return IconButton(
+                  icon: Icon(Icons.star_border, color: Colors.amberAccent),
+                  onPressed: onPressAction,
                 );
               }
-              return const SizedBox.shrink();
             },
           ),
           IconButton(
@@ -93,9 +93,9 @@ class TodoDetailPage extends StatelessWidget {
             onPressed: () async {
               await context.read<TodoDetailCubit>().saveTodo();
               // Navigator.of(context).pop(true);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Saving changes...')),
-              );
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //   const SnackBar(content: Text('Saving changes...')),
+              // );
             },
           ),
         ],
@@ -220,7 +220,7 @@ class TodoDetailPage extends StatelessWidget {
                           const Duration(days: 365 * 5),
                         ),
                       );
-                      if (date != null) {
+                      if (context.mounted && date != null) {
                         context.read<TodoDetailCubit>().updateDueDate(date);
                       }
                     },

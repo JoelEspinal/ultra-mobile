@@ -61,11 +61,21 @@ class TodoDetail {
 
   // Factory to create from basic Todo entity
   factory TodoDetail.fromTodo(Todo todo) {
+    // Ensure we use the Priority enum directly, or default to medium if null
+    final Priority priority = (todo.priority is Priority) ? todo.priority as Priority : Priority.medium;
+
     return TodoDetail(
       id: todo.id,
       todo: todo.todo,
       completed: todo.completed,
       userId: todo.userId,
+      category: todo.category ??= "",
+      description: todo.description ??= "",
+      imagePath: todo.imagePath ??= "",
+      dueDate: todo.dueDate,
+      isFavorite: todo.isFavorite ??= false,
+      priority: priority,
+      reminderTime: todo.reminderTime,
     );
   }
 }

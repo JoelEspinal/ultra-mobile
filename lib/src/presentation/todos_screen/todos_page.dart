@@ -60,7 +60,6 @@ class TodosPage extends StatelessWidget {
                                 height: 100.0,
                                 child: ListTile(
                                   onTap: () async {
-                                    final cubit = context.read<TodosCubit>();
                                     final result = await Navigator.pushNamed(
                                       context,
                                       '/todoDetail',

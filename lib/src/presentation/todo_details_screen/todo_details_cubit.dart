@@ -97,7 +97,8 @@ class TodoDetailCubit extends Cubit<TodoDetailState> {
     final updatedTodo = state.todoDetail!.copyWith(
       isFavorite: !state.todoDetail!.isFavorite,
     );
-    emit(state.copyWith(todoDetail: updatedTodo));
+    emit(state.copyWith(
+        todoDetail: updatedTodo, status: TodoDetailStatus.success));
   }
 
   // Pick image from camera
@@ -211,11 +212,11 @@ class TodoDetailCubit extends Cubit<TodoDetailState> {
         );
       },
       (updatedTodo) {
-        var a = TodoDetail.fromTodo(detailTodo);
+        var todoDetail = TodoDetail.fromTodo(detailTodo);
         emit(
           state.copyWith(
             status: TodoDetailStatus.success,
-            todoDetail: a,
+            todoDetail: todoDetail,
             errorMessage: '',
           ),
         );
