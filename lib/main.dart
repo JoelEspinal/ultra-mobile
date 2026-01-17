@@ -6,8 +6,7 @@ import 'package:ultra_mobile/src/data/database/hive/models/todo_adapter.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'src/app.dart';
-import 'src/data/database/hive/models/todo.dart';
-import 'src/data/database/hive/models/todo_adapter.dart';
+import 'src/data/database/hive/models/todo.dart' hide TodoAdapter;
 
 void main() async {
   final String todoBoxName = 'todos';
