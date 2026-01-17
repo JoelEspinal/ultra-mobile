@@ -6,7 +6,7 @@ enum Priority { high, medium, low }
 
 class TodoDetail {
   final int id;
-  final String todo;
+  final String task;
   final bool completed;
   final String description;
   final DateTime? dueDate;
@@ -19,7 +19,7 @@ class TodoDetail {
 
   const TodoDetail({
     required this.id,
-    required this.todo,
+    required this.task,
     required this.completed,
     this.description = '',
     this.dueDate,
@@ -33,7 +33,7 @@ class TodoDetail {
 
   TodoDetail copyWith({
     int? id,
-    String? todo,
+    String? task,
     bool? completed,
     String? description,
     DateTime? dueDate,
@@ -46,7 +46,7 @@ class TodoDetail {
   }) {
     return TodoDetail(
       id: id ?? this.id,
-      todo: todo ?? this.todo,
+      task: task ?? this.task,
       completed: completed ?? this.completed,
       description: description ?? this.description,
       dueDate: dueDate ?? this.dueDate,
@@ -66,7 +66,7 @@ class TodoDetail {
 
     return TodoDetail(
       id: todo.id,
-      todo: todo.todo,
+      task: todo.task,
       completed: todo.completed,
       userId: todo.userId,
       category: todo.category ??= "",

@@ -31,7 +31,7 @@ class RemoteTodoService {
   }
 
   Future<TodosResponse> paginateTodos({int limit = 20, int skip = 0}) async {
-    final request = "${Constant.baseUrl}?${Constant.limit}=$limit&skip=$skip";
+    final request = "${Constant.baseUrl}${Constant.todosEndpoint}?${Constant.limit}=$limit&skip=$skip";
     final response = await apiClient.dio.get(request);
     return TodosResponse.fromJson(response.data);
   }

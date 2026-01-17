@@ -23,7 +23,7 @@ class RemoteTodoRepositoryImpl implements RemoteTodoRepository {
 
       final todoEntity = Todo(
         id: t.id,
-        todo: t.todo,
+        task: t.todo,
         completed: t.completed,
         userId: t.userId,
       );
@@ -47,7 +47,7 @@ class RemoteTodoRepositoryImpl implements RemoteTodoRepository {
           .map(
             (remoteTodo) => Todo(
               id: remoteTodo.id,
-              todo: remoteTodo.todo,
+              task: remoteTodo.todo,
               completed: remoteTodo.completed,
               userId: remoteTodo.userId,
             ),
@@ -66,7 +66,7 @@ class RemoteTodoRepositoryImpl implements RemoteTodoRepository {
       final remoteTodo = await remoteTodoService.fetchTodo(id);
       final todo = Todo(
         id: remoteTodo.id,
-        todo: remoteTodo.todo,
+        task: remoteTodo.todo,
         completed: remoteTodo.completed,
         userId: remoteTodo.userId,
       );

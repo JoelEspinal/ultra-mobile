@@ -19,7 +19,7 @@ class UpdateTodoUseCase {
       final todoModel = Todo.fromTodoEntity(todo);
       final foundTodo = await persistenceRepository.getTodo(todoModel.id);
       if (foundTodo == null) {
-        throw UnablToFindTodoFailire("$id");
+        throw UnableToFindTodoFailure("$id");
       }
 
       await persistenceRepository.updateTodo(foundTodo);

@@ -89,7 +89,7 @@ class LocalPersistenceRepositoryImpl implements LocalPersistenceRepository {
     try {
       return localDataSource.getTodo(id);
     } catch (e) {
-      throw UnablaToFIndLocalTodo(e.toString());
+      throw UnableToFindLocalTodo(e.toString());
     }
   }
 

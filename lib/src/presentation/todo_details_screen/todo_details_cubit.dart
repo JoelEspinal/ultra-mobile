@@ -43,7 +43,7 @@ class TodoDetailCubit extends Cubit<TodoDetailState> {
   void updateTitle(String newTitle) {
     if (state.todoDetail == null) return;
 
-    final updatedTodo = state.todoDetail!.copyWith(todo: newTitle);
+    final updatedTodo = state.todoDetail!.copyWith(task: newTitle);
     emit(state.copyWith(todoDetail: updatedTodo));
   }
 

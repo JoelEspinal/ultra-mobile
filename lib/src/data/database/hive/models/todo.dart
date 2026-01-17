@@ -2,12 +2,14 @@ import 'package:hive/hive.dart';
 
 import '../../../../domain/entities/todo.dart' as todo_entity;
 
+part 'todo.g.dart';
+
 @HiveType(typeId: 0)
 class Todo extends HiveObject {
   @HiveField(0)
   final int id;
   @HiveField(1)
-  final String todo;
+  final String task;
   @HiveField(2)
   final bool completed;
   @HiveField(3)
@@ -33,7 +35,7 @@ class Todo extends HiveObject {
 
   Todo({
     required this.id,
-    required this.todo,
+    required this.task,
     required this.completed,
     required this.userId,
     this.description,
@@ -50,7 +52,7 @@ class Todo extends HiveObject {
   todo_entity.Todo toEntity() {
     return todo_entity.Todo(
       id: id,
-      todo: todo,
+      task: task,
       completed: completed,
       userId: userId,
       description: description,
@@ -68,7 +70,7 @@ class Todo extends HiveObject {
   factory Todo.fromTodoEntity(todo_entity.Todo todo) {
     return Todo(
         id: todo.id,
-        todo: todo.todo,
+        task: todo.task,
         completed: todo.completed,
         userId: todo.userId,
         description: todo.description,
@@ -84,7 +86,7 @@ class Todo extends HiveObject {
 
   Todo copyWith({
     int? id,
-    String? todo,
+    String? task,
     bool? completed,
     int? userId,
     String? description,
@@ -99,7 +101,7 @@ class Todo extends HiveObject {
   }) {
     return Todo(
       id: id ?? this.id,
-      todo: todo ?? this.todo,
+      task: task ?? this.task,
       completed: completed ?? this.completed,
       userId: userId ?? this.userId,
       description: description ?? this.description,

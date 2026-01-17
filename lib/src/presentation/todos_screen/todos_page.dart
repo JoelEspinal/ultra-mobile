@@ -49,7 +49,7 @@ class TodosPage extends StatelessWidget {
                                         .deleteTodo(todo.id);
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        content: Text('Deleted "${todo.todo}"'),
+                                        content: Text('Deleted "${todo.task}"'),
                                       ),
                                     );
                                   },
@@ -73,7 +73,7 @@ class TodosPage extends StatelessWidget {
                                     }
                                   },
                                   title: Text(
-                                    todo.todo,
+                                    todo.task,
                                     style: todo.completed
                                         ? TextStyle(
                                             fontWeight: FontWeight.bold,

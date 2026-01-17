@@ -65,7 +65,7 @@ class TodosCubit extends Cubit<TodosState> {
         // final resultList = resultTodos
         //     .map((model) => todo_entity.Todo(
         //         id: model.id,
-        //         todo: model.todo,
+        //         task: model.task,
         //         completed: model.completed,
         //         userId: model.userId))
         //     .toList();
@@ -85,7 +85,7 @@ class TodosCubit extends Cubit<TodosState> {
             // (filter != null && filter.isNotEmpty)
             //     ? todos
             //         .where(
-            //           (todo) => todo.todo.toLowerCase().contains(
+            //           (todo) => todo.task.toLowerCase().contains(
             //                 filter.toLowerCase(),
             //               ),
             //         )
@@ -112,8 +112,8 @@ class TodosCubit extends Cubit<TodosState> {
             status: TodoStatus.failure, errorMessage: l.message));
       },
       (r) async {
-        final resulTodos = await fetchLocalTodoUseCase.execute();
-        resulTodos.fold(
+        final resultTodosList = await fetchLocalTodoUseCase.execute();
+        resultTodosList.fold(
           (left) => Left(left),
           (right) {
             emit(
@@ -137,8 +137,8 @@ class TodosCubit extends Cubit<TodosState> {
             status: TodoStatus.failure, errorMessage: l.message));
       },
       (r) async {
-        final resulTodos = await fetchLocalTodoUseCase.execute();
-        resulTodos.fold(
+        final resultTodosList = await fetchLocalTodoUseCase.execute();
+        resultTodosList.fold(
           (left) => Left(left),
           (right) {
             emit(

@@ -13,10 +13,10 @@ class ToggleFavoriteTodoUseCase {
 
   Future<Either<Failure, Unit>> execute(int id) async {
     Todo? currentTodo = await localPersistenceRepository.getTodo(id);
-    if (currentTodo == null) return Left(UnablToFindTodoFailire("$id"));
+    if (currentTodo == null) return Left(UnableToFindTodoFailure("$id"));
 
     Todo? modelTodo = await localPersistenceRepository.getTodo(id);
-    if (modelTodo == null) throw UnablToFindTodoFailire("$id");
+    if (modelTodo == null) throw UnableToFindTodoFailure("$id");
 
     Todo resultTodo =
         await localPersistenceRepository.toggleFavorite(modelTodo);

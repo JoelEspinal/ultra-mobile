@@ -140,7 +140,7 @@
 //                 TextFormField(
 //                   // Key ensures the TextFormField is reset/rebuilt when the BLoC state object changes
 //                   key: ValueKey(state.todoDetail?.id),
-//                   initialValue: state.todoDetail?.todo,
+//                   initialValue: state.todoDetail?.task,
 //                   onChanged: (value) {
 //                     context.read<TodoDetailCubit>().updateTitle(value);
 //                   },
