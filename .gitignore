@@ -121,3 +121,7 @@ app.*.symbols
 # macOS system files
 */.DS_Store
 .DS_Store
+
+.idea/libraries/Dart_Packages.xml
+.idea/libraries/Flutter_Plugins.xml
+.idea/workspace.xml
