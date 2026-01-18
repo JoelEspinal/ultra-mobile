@@ -4,7 +4,7 @@ import 'package:pigeon/pigeon.dart';
   dartOut: 'lib/src/data/native/todo_api.g.dart',
   dartOptions: DartOptions(),
   kotlinOut: 'android/app/src/main/kotlin/com/example/ultra_mobile/TodoApi.g.kt',
-  kotlinOptions: KotlinOptions(),
+  kotlinOptions: KotlinOptions(package: 'com.example.ultra_mobile'),
   swiftOut: 'ios/Runner/TodoApi.g.swift',
   swiftOptions: SwiftOptions(),
 ))

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../common/failures/failure.dart';
 import '../../domain/entities/todo.dart';
 import '../../domain/use_cases/local_use_cases/update_todo_use_case.dart';
+import '../../data/native/todo_api.g.dart';
 import 'todo_details_status.dart';
 
 // import '../../domain/use_cases/update_todo_use_case.dart';
@@ -12,6 +13,7 @@ import 'todo_details_status.dart';
 class TodoDetailCubit extends Cubit<TodoDetailState> {
   UpdateTodoUseCase updateTodoUseCase;
   final ImagePicker _imagePicker = ImagePicker();
+  final TodoNativeApi _nativeApi = TodoNativeApi();
 
   late TodoDetail todoDetail;
 
@@ -35,6 +37,16 @@ class TodoDetailCubit extends Cubit<TodoDetailState> {
           errorMessage: '',
         ),
       );
+
+      // Fetch extended details from Native Bridge
+      try {
+        final nativeDetail = await _nativeApi.fetchTodoDetail(todo.id);
+        final mergedDetail = state.todoDetail!.mergeNative(nativeDetail);
+        emit(state.copyWith(todoDetail: mergedDetail));
+      } catch (e) {
+        // Log error but don't fail the whole screen
+        print('Error fetching native detail: $e');
+      }
       return;
     }
   }
@@ -43,7 +55,7 @@ class TodoDetailCubit extends Cubit<TodoDetailState> {
   void updateTitle(String newTitle) {
     if (state.todoDetail == null) return;
 
-    final updatedTodo = state.todoDetail!.copyWith(todo: newTitle);
+    final updatedTodo = state.todoDetail!.copyWith(task: newTitle);
     emit(state.copyWith(todoDetail: updatedTodo));
   }
 
@@ -177,7 +189,7 @@ class TodoDetailCubit extends Cubit<TodoDetailState> {
 
     final detailTodo = Todo(
       id: currentDetail.id,
-      todo: currentDetail.todo,
+      todo: currentDetail.task,
       completed: currentDetail.completed,
       userId: currentDetail.userId,
       category: currentDetail.category,

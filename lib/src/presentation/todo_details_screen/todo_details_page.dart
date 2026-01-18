@@ -138,7 +138,7 @@ class TodoDetailPage extends StatelessWidget {
                 TextFormField(
                   // Key ensures the TextFormField is reset/rebuilt when the BLoC state object changes
                   key: ValueKey(state.todoDetail?.id),
-                  initialValue: state.todoDetail?.todo,
+                  initialValue: state.todoDetail?.task,
                   onChanged: (value) {
                     context.read<TodoDetailCubit>().updateTitle(value);
                   },
@@ -307,6 +307,21 @@ class TodoDetailPage extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 12),
+                ],
+
+                if (state.todoDetail?.imageUrl != null &&
+                    state.todoDetail!.imageUrl!.startsWith('http')) ...[
+                  _buildSectionTitle('Native Image (from Android/iOS)'),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      state.todoDetail!.imageUrl!,
+                      width: double.infinity,
+                      height: 200,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
                 ],
                 Row(
                   children: [
