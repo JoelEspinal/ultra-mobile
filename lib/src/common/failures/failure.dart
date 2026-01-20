@@ -46,31 +46,31 @@ class UnexpectedFailure extends Failure {
       : super('An unexpected error occurred: $message');
 }
 
-// ----------   Local Failiures   ---------------
+// ----------   Local Failures   ---------------
 
-class UnableSyncFailire extends Failure {
-  const UnableSyncFailire() : super("Todo title cannot be empty.");
+class UnableSyncFailure extends Failure {
+  const UnableSyncFailure() : super("Todo title cannot be empty.");
 }
 
-class UnablToFindKeyFailire extends Failure {
-  const UnablToFindKeyFailire(String message)
-      : super("Cannot found key for id = $message");
+class UnableToFindKeyFailure extends Failure {
+  const UnableToFindKeyFailure(String message)
+      : super("Cannot find key for id = $message");
 }
 
 class UnableToSaveLocalListFailure extends Failure {
   const UnableToSaveLocalListFailure(String message)
-      : super("Unable lo save all local todos: $message");
+      : super("Unable to save all local todos: $message");
 }
 
 class UnableDeleteFailure extends Failure {
   const UnableDeleteFailure(String message)
-      : super("Unable lo delete local todos: $message");
+      : super("Unable to delete local todos: $message");
 }
 
 class UnableUpdateFailure extends Failure {
   const UnableUpdateFailure(
     String message,
-  ) : super("Unable lo delete local todos: $message");
+  ) : super("Unable to update local todos: $message");
 }
 
 class UnableOpenBox extends Failure {
@@ -103,8 +103,8 @@ class UnableToAddLocalTodos extends Failure {
   ) : super("Unable to add local todos: $message");
 }
 
-class UnablaToFIndLocalTodo extends Failure {
-  const UnablaToFIndLocalTodo(
+class UnableToFindLocalTodo extends Failure {
+  const UnableToFindLocalTodo(
     String message,
   ) : super("Unable to find local todos: $message");
 }
@@ -112,12 +112,12 @@ class UnablaToFIndLocalTodo extends Failure {
 class FavoriteIsNullFailure extends Failure {
   const FavoriteIsNullFailure(
     String message,
-  ) : super("Cannot asign to null Value: $message");
+  ) : super("Cannot assign to null Value: $message");
 }
 
-class UnablToFindTodoFailire extends Failure {
-  const UnablToFindTodoFailire(String message)
-      : super("Cannot found Todo for id = $message");
+class UnableToFindTodoFailure extends Failure {
+  const UnableToFindTodoFailure(String message)
+      : super("Cannot find Todo for id = $message");
 }
 
 class CannotUpdateNullValueFailure extends Failure {
