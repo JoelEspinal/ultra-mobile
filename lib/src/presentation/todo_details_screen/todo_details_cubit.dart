@@ -196,7 +196,7 @@ class TodoDetailCubit extends Cubit<TodoDetailState> {
       description: currentDetail.description,
       dueDate: currentDetail.dueDate,
       imagePath: currentDetail.imagePath,
-      imageUrl: currentDetail.imagePath, // TODO verify property
+      imageUrl: currentDetail.imageUrl,
       isFavorite: currentDetail.isFavorite,
       priority: currentDetail.priority.index,
       reminderTime: currentDetail.reminderTime,

@@ -10,7 +10,8 @@ import '../../domain/entities/todo.dart';
 import 'todo_details_cubit.dart';
 import 'todo_details_status.dart';
 
-enum TodoDetailStatus { loading, success, failure }
+
+// enum TodoDetailStatus { loading, success, failure }
 
 class TodoDetailPage extends StatelessWidget {
   final Todo todo;
@@ -92,10 +93,11 @@ class TodoDetailPage extends StatelessWidget {
             icon: const Icon(Icons.save),
             onPressed: () async {
               await context.read<TodoDetailCubit>().saveTodo();
-              // Navigator.of(context).pop(true);
-              // ScaffoldMessenger.of(context).showSnackBar(
-              //   const SnackBar(content: Text('Saving changes...')),
-              // );
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Saving changes...')),
+                );
+              }
             },
           ),
         ],
@@ -109,6 +111,11 @@ class TodoDetailPage extends StatelessWidget {
                 backgroundColor: Colors.red,
               ),
             );
+          } else if (state.status == TodoDetailStatus.success) {
+            // Only show success message if we were previously in 'updating' or 'initial' (after loading)
+            // Actually, success status in status.dart is used for both 'loaded' and 'saved'.
+            // It might be better to have a 'saved' status, but for now let's just show it if
+            // the user explicitly clicked the save button.
           }
           // Controller update logic removed as controllers are no longer used.
         },
@@ -122,9 +129,9 @@ class TodoDetailPage extends StatelessWidget {
           }
 
           if (state.status == TodoDetailStatus.success) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Saving changes...  ')),
-            );
+            // ScaffoldMessenger.of(context).showSnackBar(
+            //   const SnackBar(content: Text('Changes loaded successfully')),
+            // );
           }
 
           return SingleChildScrollView(

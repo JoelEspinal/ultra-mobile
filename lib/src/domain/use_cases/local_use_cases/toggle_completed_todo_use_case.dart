@@ -12,7 +12,7 @@ class ToggleCompleteTodoUseCase {
     try {
       final existingTodo = await localPersistenceRepository.getTodo(id);
       if (existingTodo == null) {
-        return Left(UnablToFindTodoFailire("$id"));
+        return Left(UnableToFindTodoFailure("$id"));
       }
 
       final todoResult =
