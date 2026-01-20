@@ -18,6 +18,7 @@ class Todo {
   String? imagePath;
   String? createdAt;
   String? updatedAt;
+  bool needsSync;
 
   Todo({
     required this.id,
@@ -34,6 +35,7 @@ class Todo {
     this.imagePath,
     this.createdAt,
     this.updatedAt,
+    this.needsSync = false,
   });
 
   Todo copyWith({
@@ -51,6 +53,7 @@ class Todo {
     ValueGetter<String?>? imagePath,
     ValueGetter<String?>? createdAt,
     ValueGetter<String?>? updatedAt,
+    bool? needsSync,
   }) {
     return Todo(
       id: id ?? this.id,
@@ -67,6 +70,7 @@ class Todo {
       imagePath: imagePath != null ? imagePath() : this.imagePath,
       createdAt: createdAt != null ? createdAt() : this.createdAt,
       updatedAt: updatedAt != null ? updatedAt() : this.updatedAt,
+      needsSync: needsSync ?? this.needsSync,
     );
   }
 
@@ -86,6 +90,7 @@ class Todo {
       'imagePath': imagePath,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
+      'needsSync': needsSync,
     };
   }
 
@@ -109,6 +114,7 @@ class Todo {
       imagePath: map['imagePath'],
       createdAt: map['createdAt'],
       updatedAt: map['updatedAt'],
+      needsSync: map['needsSync'] ?? false,
     );
   }
 

@@ -32,7 +32,8 @@ class LocalPersistenceRepositoryImpl implements LocalPersistenceRepository {
   @override
   Future<void> updateTodo(Todo todo) async {
     try {
-      await localDataSource.updateTodo(todo);
+      final syncedTodo = todo.copyWith(needsSync: true);
+      await localDataSource.updateTodo(syncedTodo);
     } catch (e) {
       throw UnableUpdateFailure(e.toString());
     }
@@ -69,7 +70,8 @@ class LocalPersistenceRepositoryImpl implements LocalPersistenceRepository {
   @override
   Future<void> addTodo(Todo todo) {
     try {
-      return localDataSource.addTodo(todo);
+      final syncedTodo = todo.copyWith(needsSync: true);
+      return localDataSource.addTodo(syncedTodo);
     } catch (e) {
       throw UnableToAddTodo(e.toString());
     }
@@ -97,11 +99,11 @@ class LocalPersistenceRepositoryImpl implements LocalPersistenceRepository {
   Future<Todo> toggleFavorite(Todo todo) async {
     try {
       if (todo.isFavorite == null) {
-        final result = todo.copyWith(isFavorite: false);
+        final result = todo.copyWith(isFavorite: false, needsSync: true);
         return Future.value(result);
       } else {
         bool result = todo.isFavorite! ? false : true;
-        final resultTodo = todo.copyWith(isFavorite: result);
+        final resultTodo = todo.copyWith(isFavorite: result, needsSync: true);
         return Future.value(resultTodo);
       }
     } catch (e) {
@@ -111,7 +113,7 @@ class LocalPersistenceRepositoryImpl implements LocalPersistenceRepository {
 
   @override
   Future<Todo> toggleCompleted(Todo todo) {
-    final updatedTodo = todo.copyWith(completed: !todo.completed);
+    final updatedTodo = todo.copyWith(completed: !todo.completed, needsSync: true);
     return Future.value(updatedTodo);
   }
 }

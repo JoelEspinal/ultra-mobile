@@ -30,6 +30,8 @@ class Todo extends HiveObject {
   final String? createdAt;
   @HiveField(12)
   final String? updatedAt;
+  @HiveField(13)
+  final bool needsSync;
 
   Todo({
     required this.id,
@@ -45,6 +47,7 @@ class Todo extends HiveObject {
     this.isFavorite,
     this.createdAt,
     this.updatedAt,
+    this.needsSync = false,
   });
 
   todo_entity.Todo toEntity() {
@@ -62,6 +65,7 @@ class Todo extends HiveObject {
       isFavorite: isFavorite,
       createdAt: createdAt,
       updatedAt: updatedAt,
+      needsSync: needsSync,
     );
   }
 
@@ -79,7 +83,8 @@ class Todo extends HiveObject {
         reminderTime: todo.reminderTime,
         isFavorite: todo.isFavorite,
         createdAt: todo.createdAt,
-        updatedAt: todo.updatedAt);
+        updatedAt: todo.updatedAt,
+        needsSync: todo.needsSync);
   }
 
   Todo copyWith({
@@ -96,6 +101,7 @@ class Todo extends HiveObject {
     bool? isFavorite,
     String? createdAt,
     String? updatedAt,
+    bool? needsSync,
   }) {
     return Todo(
       id: id ?? this.id,
@@ -111,6 +117,7 @@ class Todo extends HiveObject {
       isFavorite: isFavorite ?? this.isFavorite,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      needsSync: needsSync ?? this.needsSync,
     );
   }
 
