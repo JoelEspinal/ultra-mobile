@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F9AF75B32C3A62C7EDBE4286 /* TodoApi.g.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AF75B42C3A62C7EDBE4286 /* TodoApi.g.swift */; };
+		F9AF75B52C3A62C7EDBE4287 /* TodoNativeApiImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AF75B62C3A62C7EDBE4287 /* TodoNativeApiImpl.swift */; };
 		060E63907EF708E7C64ECD19 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A58323D0027730030169AF4 /* Pods_Runner.framework */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		331C808B294A63AB00263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C807B294A618700263BE5 /* RunnerTests.swift */; };
@@ -42,6 +44,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F9AF75B42C3A62C7EDBE4286 /* TodoApi.g.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoApi.g.swift; sourceTree = "<group>"; };
+		F9AF75B62C3A62C7EDBE4287 /* TodoNativeApiImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoNativeApiImpl.swift; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		242BDDC03CA32F4C374D3079 /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -139,6 +143,8 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				F9AF75B42C3A62C7EDBE4286 /* TodoApi.g.swift */,
+				F9AF75B62C3A62C7EDBE4287 /* TodoNativeApiImpl.swift */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
 				97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */,
@@ -377,6 +383,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9AF75B32C3A62C7EDBE4286 /* TodoApi.g.swift in Sources */,
+				F9AF75B52C3A62C7EDBE4287 /* TodoNativeApiImpl.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 			);
