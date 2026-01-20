@@ -23,7 +23,7 @@ class DeleteTodoUseCase {
 
       return Future.value(Right(unit));
     } catch (e) {
-      return Left(UnablToFindKeyFailire('error: $e'));
+      return Left(UnableToFindKeyFailure('error: $e'));
     }
   }
 }

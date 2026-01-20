@@ -63,7 +63,7 @@ class TodoLocalDataSource {
       final box = todoBox;
       Todo todoValue = box.values.firstWhere((element) => element.id == id);
       final key = getKeyFromValue(box, todoValue);
-      if (key == null) throw UnablToFindKeyFailire("$id");
+      if (key == null) throw UnableToFindKeyFailure("$id");
 
       return await box.delete(key);
     } catch (e) {
