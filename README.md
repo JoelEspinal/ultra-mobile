@@ -1,100 +1,41 @@
+# 📱 Ultra Mobile — Flutter To-Do (Clean Architecture demo)
 
+A Flutter to-do app built as a technical challenge. It shows Clean Architecture
+with immutable models, Cubit state management, functional error handling and
+offline-first persistence.
 
-📱 Ultra Mobile App: Gestión de Tareas (Demo)
+## ✨ Features
+- Fetches to-dos from the [DummyJSON](https://dummyjson.com/docs/todos) API with
+  pagination (`limit` / `skip`)
+- Caches them locally with Hive, so the list works offline after the first load
+- Create, read, update and delete to-dos, with priority and due date
+- Attach an image to a to-do from the camera or gallery (`image_picker`)
 
-Este proyecto es una aplicación de demostración de manejo de tareas (To-Do List) desarrollada en Flutter. Su objetivo principal es demostrar la implementación de una Arquitectura Limpia (Clean Architecture) con un enfoque en la inmutabilidad, la gestión avanzada de estados y la persistencia local robusta.
+## 🏗️ Architecture
+```text
+lib/src/
+├── domain/        # Entities, repository contracts, use cases, failures (no Flutter imports)
+├── data/          # Dio API client, Hive data source and models, repository implementations
+└── presentation/  # Pages + Cubits (MVVM)
+```
 
-🌟 Breve Descripción
+- **Clean Architecture:** strict separation between domain, data and presentation
+- **MVVM:** each screen has a Cubit acting as its ViewModel
+- **Repository pattern:** the domain depends on abstractions, not on Dio or Hive
+- **Adapter mapping:** `fromEntity` / `toEntity` between Hive models and domain entities
+- **Functional errors:** repositories return `Either<Failure, T>` (dartz)
+- **Immutability:** entities and models generated with freezed
 
-Ultra Mobile permite a los usuarios crear, leer, actualizar y eliminar tareas (Todos). Incluye la gestión de detalles de tareas, como prioridades, fechas de vencimiento y la funcionalidad de adjuntar imágenes, todo ello persistido localmente.
+## 🛠️ Tech
+Flutter · Dart · flutter_bloc (Cubit) · Provider (DI) · Dio · Hive CE ·
+freezed · json_serializable · dartz · image_picker · intl
 
-🏗️ Arquitectura y Patrones Utilizados
-
-La aplicación está construida sobre los principios de la Arquitectura Limpia y Clean Code, garantizando una estricta División de Responsabilidades (Separation of Concerns) entre las capas.
-
-Capas
-
-Domain (Dominio): Contiene las Entidades (Todo) y los Contratos de Repositorio (TodoRepository). Es la capa más interna y pura, libre de dependencias de frameworks.
-
-Data (Datos): Implementa la persistencia (con Hive) y define los Modelos de Datos (TodoModel). Aquí se encuentran las implementaciones concretas del Repositorio (TodoRepositoryImpl).
-
-Presentation (Presentación): Responsable de la UI y la gestión del estado.
-
-Patrones de Diseño
-
-Model-View-ViewModel (MVVM): Utilizado en la capa de Presentación para desacoplar la lógica de estado (ViewModel/Cubit) de la interfaz de usuario (View).
-
-Repository Pattern: Aísla la capa de datos de la lógica de negocio.
-
-Adapter Pattern: Se utiliza para mapear (fromEntity, toEntity) datos entre el Dominio (Entidades) y la Data (Modelos Hive).
-
-Gestión de Estado y Funcional
-
-Cubit (o Bloc): Se emplea para la gestión de estados reactiva, manejando la lógica del flujo de datos en la capa de Presentación.
-
-Provider: Utilizado principalmente para la inyección de dependencias y el acceso a los servicios (Repositorios, Cubits) en la jerarquía de widgets.
-
-DartZ (Either): Implementación de la librería dartz para un manejo funcional y explícito de errores, devolviendo Either<Failure, Success> desde la capa de Datos.
-
-✨ Decisiones Técnicas Importantes
-
-Persistencia Local (Hive): Elegido por su rendimiento y su naturaleza de base de datos NoSQL Key-Value, ideal para almacenamiento local simple y rápido.
-
-Inmutabilidad: Uso de la librería freezed para Entidades y Modelos, garantizando que los objetos sean inmutables y facilitando su comparación (equatable).
-
-📦 Dependencias y Librerías (Estabilizadas)
-
-Se presenta la lista de dependencias con versiones ajustadas para resolver conflictos comunes con build_runner (específicamente entre freezed y source_gen).
-
-Motor de generación de código:
-build_runner: ^2.7.0
-
-Generación (dev):
-freezed: ^4.0.0
-
-
-Persistencia - Base de datos local:
-hive_ce_generator: ^1.10.0
-hive_flutter: ^1.1.0
-
-Gestión de estados:
-flutter_bloc: ^9.1.1
-bloc: ^9.1.0
-
-Funcional - Manejo funcional de errores (Either):
-
-dartz: ^0.10.1
-
-Utilidades - Captura y selección de imágenes:
-image_picker: ^1.2.0
-
-
-Otros
-provider: ^6.1.5+1
-dio: ^5.9.0 
-intl: ^0.20.2
-build_runner: ^2.7.0
-
-...
-
-Inyección de dependencias, cliente HTTP, internacionalización.
-
-⚙️ Instrucciones de Instalación y Ejecución
-
-Siga estos pasos para configurar y ejecutar el proyecto:
-
-Obtener Dependencias:
-
+## ▶️ Run it
+```bash
 flutter pub get
+dart run build_runner build --delete-conflicting-outputs
+flutter run
+```
 
-
-Generar Código (Observador):
-Ejecute este comando para generar automáticamente archivos (.g.dart, .freezed.dart) para Hive, Freezed y JSON.
-
-dart run build_runner watch --delete-conflicting-outputs
-
-
-Ejecutar Aplicación:
-Asegúrese de que los permisos de Cámara/Galería estén configurados en Info.plist (iOS) y AndroidManifest.xml (Android) antes de ejecutar.
-
-flutter run -d <device_id>
+Camera and gallery permissions must be set in `Info.plist` (iOS) and
+`AndroidManifest.xml` (Android) to attach images.
